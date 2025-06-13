@@ -1,0 +1,84 @@
+swagger: '2.0'
+info:
+  title: API de Red Social
+  description: Documentación de la API para la red social
+  version: 1.0.0
+host: localhost:3001
+basePath: /
+tags:
+  - name: Users
+schemes:
+  - http
+paths:
+  /users:
+    get:
+      tags:
+        - Users
+      description: ''
+      responses:
+        '200':
+          description: OK
+        '204':
+          description: No Content
+    post:
+      tags:
+        - Users
+      description: ''
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              nickName:
+                example: any
+              email:
+                example: any
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      description: ''
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+    put:
+      tags:
+        - Users
+      description: ''
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+    delete:
+      tags:
+        - Users
+      description: ''
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
