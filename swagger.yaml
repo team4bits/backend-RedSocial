@@ -7,6 +7,7 @@ host: localhost:3001
 basePath: /
 tags:
   - name: Users
+  - name: Tags
 schemes:
   - http
 paths:
@@ -71,6 +72,76 @@ paths:
     delete:
       tags:
         - Users
+      description: ''
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+  /tags:
+    get:
+      tags:
+        - Tags
+      description: ''
+      responses:
+        '200':
+          description: OK
+        '204':
+          description: No Content
+    post:
+      tags:
+        - Tags
+      description: ''
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              tag:
+                example: any
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+  /tags/{id}:
+    get:
+      tags:
+        - Tags
+      description: ''
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+    put:
+      tags:
+        - Tags
+      description: ''
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+    delete:
+      tags:
+        - Tags
       description: ''
       parameters:
         - name: id
