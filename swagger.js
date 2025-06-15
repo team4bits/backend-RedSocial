@@ -6,7 +6,8 @@ require('dotenv').config();
 const outputFile = './swaggerDoc.json';
 const endpointsFiles = [
     './src/main.js',
-    './src/routes/userRoute.js'
+    './src/routes/userRoute.js',
+    './src/routes/tagRoute.js'
   ];
 const doc = {
     info: {
@@ -16,7 +17,8 @@ const doc = {
     host:  `localhost:${process.env.PORT || 3000}`,
     schemes: ['http'],
     tags: [
-      { name: 'Users'}
+      { name: 'Users'},
+      { name: 'Tags'}
     ]
 };
 

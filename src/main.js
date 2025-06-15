@@ -22,7 +22,7 @@ app.use(genericMiddleware.logRequest); // se utiliza para corroborar las peticio
 app.use("/users", userRoute);
 //app.use("/comments", commentRoute) ;
 //app.use('/posts', postRoute);
-//app.use("/tags", tagRoute);
+app.use("/tags", tagRoute);
 //app.use("/archives", archiveRoute);
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocumentation));
 
