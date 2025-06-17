@@ -6,6 +6,10 @@ const router = Router();
 router.get('/',
     commentController.getComments
 );
+//Obtener todos los comentarios de un post
+router.get('/:postId',
+    commentController.getPostComments
+)
 //Crear un nuevo comentario
 router.post('/',
     commentController.createComment
