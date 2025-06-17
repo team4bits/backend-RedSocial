@@ -22,12 +22,11 @@ const getComments = async (_,res) => {
         //Retornar error
         res.status(500).json({error: error.message})
     }
-    return ;
 }
 //Obtener todos los comentarios de un post -> getPostComments
 const getPostComments = async (req, res) => {
     //Obtener el id del post
-    const postId = req.params.postId;
+    const postId = req.params.id;
     const cacheKey = `comments:${postId}`
     try {
         const cached = await redisClient.get(cacheKey);
@@ -37,11 +36,13 @@ const getPostComments = async (req, res) => {
         }
         //Obtener ls comentarios guardados en la db
         const comments = await Post.find({post: postId});
+        //Guardar los comentarios en la cache
+        await redisClient.set(cacheKey, JSON.stringify(comments), {EX: 300});
+        //Retornar los comentarios
         res.status(200).json(comments);
     } catch (error) {
         res.status(500).json({error: error.message})
     }
-    return;
 }
 //Crear un nuevo comentario -> createComment
 const createComment = async (req, res) => {

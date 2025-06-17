@@ -1,14 +1,17 @@
 const {Router} = require('express');
 const {commentController} = require('../controllers');
+const {genericMiddleware} = require('../middlewares');
+const {Post} = require('../models');
 const router = Router();
 
 //Obtener todos los comentarios
 router.get('/',
     commentController.getComments
 );
-//Obtener todos los comentarios de un post
-router.get('/:postId',
+//Obtener todos los comentarios de un post(mover a postRoute.js)
+router.get('/post/:id',
     //Verificar que exista el post
+    genericMiddleware.existsModelById(Post),
     commentController.getPostComments
 )
 //Crear un nuevo comentario
