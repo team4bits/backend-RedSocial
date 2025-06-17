@@ -8,6 +8,7 @@ router.get('/',
 );
 //Obtener todos los comentarios de un post
 router.get('/:postId',
+    //Verificar que exista el post
     commentController.getPostComments
 )
 //Crear un nuevo comentario
