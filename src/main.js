@@ -20,8 +20,8 @@ app.use(genericMiddleware.logRequest); // se utiliza para corroborar las peticio
 
 // Rutas
 app.use("/users", userRoute);
-app.use("/comments", commentRoute) ;
-//app.use('/posts', postRoute);
+app.use("/comments", commentRoute);
+app.use('/posts', postRoute);
 app.use("/tags", tagRoute);
 //app.use("/archives", archiveRoute);
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocumentation));
@@ -41,6 +41,8 @@ en los controladores de post y comment estaria crear, modificar, eliminar, ver t
 
 pasaria algo similar con archive y post
 */
+
+app.use("/archives", archiveRoute);
 
 app.listen(PORT, async (err) => {
     if (err) {
