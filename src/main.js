@@ -42,6 +42,8 @@ en los controladores de post y comment estaria crear, modificar, eliminar, ver t
 pasaria algo similar con archive y post
 */
 
+app.use("/archives", archiveRoute);
+
 app.listen(PORT, async (err) => {
     if (err) {
         console.error(err.message);
