@@ -25,7 +25,11 @@ const getComments = async (_,res) => {
 }
 //Obtener todos los comentarios de un post -> getPostComments
 const getPostComments = async (req, res) => {
-    //Obtener el id del post
+    /*
+        Obtener todos los comentarios de un post
+        req.params.id -> id del post
+        Guardar los comentarios en la cache con la key: comments:<postId>
+    */
     const postId = req.params.id;
     const cacheKey = `comments:${postId}`
     try {
@@ -54,7 +58,23 @@ const updateComment = async (req,res) => {
 }
 //Borrar un comentario por id -> deleteComment
 const deleteComment = async (req, res) => {
-    return;
+    /*
+        Borrar un comentario por id
+        req.params.id -> id del comentario
+        Eliminar el comentario de la cache con la key: comment:<commentId>
+    */
+    const commentId = req.params.id;
+    const cacheKey = `comment:${commentId}`;
+    try {
+        //Eliminar el comentario de la db
+        const deletedComment = await Comment.findByIdAndDelete(commentId);
+        //Eliminar el comentario de la cache
+        await redisClient.del(cacheKey);
+        //Retornar el comentario eliminado
+        res.status(200).json(deletedComment);
+    } catch (error) {
+        res.status(500).json({error: error.message});
+    }
 }
 
 module.exports ={

@@ -20,7 +20,7 @@ app.use(genericMiddleware.logRequest); // se utiliza para corroborar las peticio
 
 // Rutas
 app.use("/users", userRoute);
-//app.use("/comments", commentRoute) ;
+app.use("/comments", commentRoute) ;
 //app.use('/posts', postRoute);
 app.use("/tags", tagRoute);
 //app.use("/archives", archiveRoute);
