@@ -23,5 +23,10 @@ router.delete('/:id',
     genericMiddleware.existsModelById(Comment),
     commentController.deleteComment
 )
+//Obtener un comentario por id
+router.get('/:id',
+    genericMiddleware.existsModelById(Comment),
+    commentController.getCommentById
+);
 //Exportar el router
 module.exports = router;

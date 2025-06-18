@@ -24,6 +24,12 @@ const commentSchema = new mongoose.Schema(
             default: Date.now
         }
     }
-)
+);
+commentSchema.set("toJson", {
+    transform: (_, ret) => {
+        delete ret.__v; // Eliminar el campo __v
+        delete ret._id; // Eliminar el campo _id
+    }
+});
 const Comment = mongoose.model("Comment", commentSchema);
 module.exports = Comment;
