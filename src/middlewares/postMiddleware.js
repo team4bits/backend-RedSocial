@@ -1,25 +1,24 @@
 const { Post,User } = require('../models');
-
-const { status500 } = require("./genericMiddleware")
+const { errorPersonalizado } = require('./genericMiddleware');
 
 const existUserRequest = async (req, res, next) => {
     try {
         const userId = req.body.userId;
         if (!userId) {
-            return res.status(400).json({ error: "El ID del usuario es requerido" });
+            return errorPersonalizado("El ID del usuario es requerido", 400, next);
         }
-        if (userId.length !== 12) {
-            return res.status(400).json({ error: "El ID del usuario debe tener 12 caracteres" });
+        if (userId.length !== 24) {
+            return errorPersonalizado("El ID del usuario debe ser una cadena de strings de 24 caracteres hexadecimales", 400, next);
         }
         const user = await User.findById(userId);
         if (!user) {
-            return res.status(404).json({ error: `Usuario con ID ${userId} no encontrado` });
+            return errorPersonalizado(`Usuario con ID ${userId} no encontrado`, 404, next);
         }
+        next();
     } catch (error) {
-        return status500(res, error);
+        next(error);
     }
-    next();
-}
+};
 
 // const validarImagenAsociadaAPost = async (req,res,next) => {
 //     try{
