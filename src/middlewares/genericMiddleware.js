@@ -1,3 +1,4 @@
+const {redisClient} = require('../config/redisClient');
 const logRequest = (req, _, next) => {
     console.log({ method: req.method, url: req.url, fechaHora: new Date(), body: req.body, params: req.params });
     next();

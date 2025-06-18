@@ -106,4 +106,7 @@ const deleteById = async (req, res) => {
   }
 };
 
-module.exports = { getArchives, createArchive, createArchives, updateArchive, deleteById };
+module.exports = { getArchives,
+   //createArchive,
+   createArchives,
+   updateArchive, deleteById };

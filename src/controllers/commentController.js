@@ -1,27 +1,21 @@
 const {Comment, Post} = require('../models');
 
-const redisClient = require('../config/redisClient')
+const {redisClient} = require('../config/redisClient')
+
+//Importar controladores de cache
+const {deleteModelsCache, deleteModelByIdCache, getModelsCache} = require('./genericController');
 
 
 //Obtener todos los comentarios -> getComments
 const getComments = async (_,res) => {
     //Guardar la cacheKey
-    const cacheKey = 'comment:list'
-    try {
-        //obtener los comentarios guardados en cache
-        const cached = await redisClient.get(cacheKey)
-        if(cached){//Si hay guardado
-            //Retornar lo guardado
-            return res.status(200).json(JSON.parse(cached))
-        }
-        //Obtener los comentarios buardados en la db
-        const comments = await Comment.find()
-        await redisClient.set(cacheKey, JSON.stringify(comments), {EX: 300})
-        res.status(200).json(comments)
-    } catch (error) {
-        //Retornar error
-        res.status(500).json({error: error.message})
-    }
+    const cached = await getModelsCache(Comment);
+    const comments = cached ? JSON.parse(cached) : await Comment.find();
+    //Guardar los comentarios en la cache con la key: comments:todos
+    await redisClient.set('comments:todos', JSON.stringify(comments), {EX: 300});
+    //Retornar los comentarios
+    res.status(200).json(comments);
+    
 }
 //Obtener todos los comentarios de un post -> getPostComments
 const getPostComments = async (req, res) => {
@@ -50,11 +44,25 @@ const getPostComments = async (req, res) => {
 }
 //Crear un nuevo comentario -> createComment
 const createComment = async (req, res) => {
-    return ;
+    const comment = await Comment.create(req.body);//Crear el comentario
+    deleteModelsCache(Comment);
+    res.status(201).json(comment);
 }
 //Actualizar un comentario por id -> updateComment
 const updateComment = async (req,res) => {
-    return ;
+    /*
+        req.params.id -> id del comentario
+        req.body -> datos a actualizar
+    */
+   await Comment.findByIdAndUpdate(req.params.id, req.body, {new: true})
+    //Eliminar el comentario de la cache
+    deleteModelByIdCache(Comment, req.params.id);
+    //Retornar el comentario actualizado
+    const updatedComment = await Comment.findById(req.params.id);
+    res.status(200).json({
+        message: 'Comentario actualizado',
+        comment: updatedComment
+    });
 }
 //Borrar un comentario por id -> deleteComment
 const deleteComment = async (req, res) => {
