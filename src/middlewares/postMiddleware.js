@@ -7,7 +7,7 @@ const existUserRequest = async (req, res, next) => {
         if (!userId) {
             return errorPersonalizado("El ID del usuario es requerido", 400, next);
         }
-        if (userId.length !== 24) {
+        if (!/^[a-fA-F0-9]{24}$/.test(userId)) {
             return errorPersonalizado("El ID del usuario debe ser una cadena de strings de 24 caracteres hexadecimales", 400, next);
         }
         const user = await User.findById(userId);
