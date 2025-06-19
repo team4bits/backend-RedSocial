@@ -53,7 +53,8 @@ const errorPersonalizado = (message, status, next) => {
     return next(err);
 };
 
-const manejoDeErroresGlobales = ((err, req, res, next) => {
+const manejoDeErroresGlobales = ((err, req, res, next) => {        
+    //console.error(err);            // Descomentar para Debugging
     if (err.name === 'ValidationError') {
         const messages = Object.values(err.errors).map(e => e.message); //Extraes SOLO los mensajes de errores de validación moongose (del modelo)
         return res.status(400).json({ error: messages });

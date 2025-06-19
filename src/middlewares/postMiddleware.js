@@ -1,4 +1,4 @@
-const { Post,User } = require('../models');
+const { Post, User } = require('../models');
 const { errorPersonalizado } = require('./genericMiddleware');
 
 const existUserRequest = async (req, res, next) => {
@@ -19,6 +19,13 @@ const existUserRequest = async (req, res, next) => {
         next(error);
     }
 };
+
+const userDoesntChange = (req, res, next) => {
+    if (req.body.userId !== undefined) {
+        return errorPersonalizado("No se puede modificar el userId de un post", 400, next);
+    }
+    next();
+}
 
 // const validarImagenAsociadaAPost = async (req,res,next) => {
 //     try{
@@ -67,5 +74,5 @@ const existUserRequest = async (req, res, next) => {
 //     };
 
 
-  
-module.exports = {existUserRequest};
+
+module.exports = { existUserRequest, userDoesntChange };

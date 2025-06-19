@@ -32,6 +32,7 @@ router.post("/",
 
 router.put("/:id",
   genericMiddleware.existsModelById(Post),
+  postMiddleware.userDoesntChange,
   /* 
     #swagger.tags = ['Posts']
     #swagger.path = '/posts/{id}'
