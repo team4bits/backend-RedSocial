@@ -7,6 +7,7 @@ const { genericMiddleware } = require("./middlewares");
 const { userRoute, postRoute, tagRoute, commentRoute, archiveRoute} = require("./routes");
 const path = require('path');
 const { mongo, redis } = require('./config');
+const {manejoDeErroresGlobales} = require("./middlewares/genericMiddleware");
 require('dotenv').config()
 
 const app = express()
@@ -26,6 +27,7 @@ app.use("/comments", commentRoute);
 app.use('/posts', postRoute);
 app.use("/tags", tagRoute);
 //app.use("/archives", archiveRoute);
+app.use("/archives", archiveRoute);
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocumentation));
 app.use(cors({origin: 'http://localhost:5173'}))
 
@@ -45,7 +47,8 @@ en los controladores de post y comment estaria crear, modificar, eliminar, ver t
 pasaria algo similar con archive y post
 */
 
-app.use("/archives", archiveRoute);
+
+app.use(manejoDeErroresGlobales); // Manejo de errores globales
 
 app.listen(PORT, async (err) => {
     if (err) {
