@@ -17,6 +17,8 @@ router.post('/post/:postId/user/:userId',
 )
 //Crear un nuevo comentario con body
 router.post('/',
+    commentMiddleware.postIdInBodyVerify,
+    commentMiddleware.userIdInBodyVerify,
     commentController.createComment
 );
 

@@ -29,8 +29,27 @@ const userVerify = async (req, res, next) => {
         return res.status(500).json({ message: 'Error verificando el usuario', error });
     }
 };
+
+//Verificar que exista el postId en el body
+const postIdInBodyVerify = (req, res, next) => {
+    if (!req.body.postId) {
+        return res.status(400).json({ message: 'El campo postId es obligatorio en el body' });
+    }
+    next();
+};
+//Verificar que exista el userId en el body
+const userIdInBodyVerify = (req, res, next) => {
+    if (!req.body.userId) {
+        return res.status(400).json({ message: 'El campo userId es obligatorio en el body' });
+    }
+    next();
+};
+
+
 //Exportar middlewares
 module.exports = {
     postVerify,
-    userVerify
+    userVerify,
+    postIdInBodyVerify,
+    userIdInBodyVerify
 };
