@@ -1,61 +1,22 @@
 const Archive = require("../models/archive");
-const redisClient = require('../config');
+const { getModelsCache } = require("./genericController");
+const { redisClient }  = require('../config/redisClient');
+
 
 const getArchives = async (req, res) => {
-  //console.log("entre")
-  const cacheKey = 'archives_all'; // CACHE
-  try {
-    //REDIS
-    const cache = await redisClient.get(cacheKey);
-    if (cache){
-      //console.log("REDIS")
-      return res.status(200).json(JSON.parse(cache));
-    }
-    //MONGO
-    const data = await Archive.find({});
-    //console.log("MONGO")
-    if (!data || data.length === 0) {
-      return res.status(204).send();
-    }
-    //GUARDAR CACHE
-    await redisClient.setEx(cacheKey, 120, JSON.stringify(data));
-
-    res.status(200).json(data);
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
+  const cached = await getModelsCache(Archive);
+  const archives = cached ? JSON.parse(cached) : await Archive.find();
+  await redisClient.set('archives:todos', JSON.stringify(archives), { EX: 300 });
+  res.status(200).json(archives);
 };
-
-/*
-// Crear un solo archivo (con imagen pasada por body, no multer)
-const createArchive = async (req, res) => {
-  try {
-    const postId = req.params.id;
-    const { imagen } = req.body;
-
-    const newArchive = await Archive.create({
-      imagen,
-      postId,
-    });
-    //REDIS - ELIMINAR CACHE
-    await redisClient.del('archives_all');
-
-    res.status(201).json(newArchive);
-  } catch (e) {
-    res.status(400).json({ error: e.message });
-  }
-};
-*/
 
 const createArchives = async (req, res) => {
   try {
-    const postId = req.params.id;
+    const { postId } = req.body;
     const archivos = req.files;
-
     if (!archivos || archivos.length === 0) {
       return res.status(400).json({ error: 'No se subieron imágenes' });
     }
-
     const nuevasEntradas = await Promise.all(
       archivos.map(file =>
         Archive.create({
@@ -64,15 +25,15 @@ const createArchives = async (req, res) => {
         })
       )
     );
-    //REDIS - ELIMINAR CACHE
-    await redisClient.del('archives_all');
-
+    await redisClient.sendCommand(['DEL', 'archives:todos']);
+    //await redisClient.del('archives_all'); // version vieja de redis
     res.status(201).json(nuevasEntradas);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
+///FALTA
 const updateArchive = async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'El campo "imagenes" es obligatorio' });
@@ -110,3 +71,25 @@ module.exports = { getArchives,
    //createArchive,
    createArchives,
    updateArchive, deleteById };
+
+
+   /*
+// Crear un solo archivo (con imagen pasada por body, no multer)
+const createArchive = async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const { imagen } = req.body;
+
+    const newArchive = await Archive.create({
+      imagen,
+      postId,
+    });
+    //REDIS - ELIMINAR CACHE
+    await redisClient.del('archives_all');
+
+    res.status(201).json(newArchive);
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
+};
+*/
