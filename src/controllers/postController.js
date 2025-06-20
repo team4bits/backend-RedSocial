@@ -3,7 +3,7 @@ const { redisClient }  = require('../config/redisClient')
 const { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache } = require("./genericController")
 
 const getPosts = async (_, res) => {
-    const cached = getModelsCache(Post)
+    const cached = await getModelsCache(Post)
     const posts = cached ? JSON.parse(cached) : await Post.find();
     await redisClient.set('posts:todos', JSON.stringify(posts), { EX: 300 })
     res.status(200).json(posts);
