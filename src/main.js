@@ -43,7 +43,15 @@ en los controladores de post y comment estaria crear, modificar, eliminar, ver t
 pasaria algo similar con archive y post
 */
 
-
+// es para simplemente ver el error del multer 
+/*
+app.use((err, req, res, next) => {
+  console.error('❌ ERROR GLOBAL:', err.message);
+  res.status(err.status || 500).json({
+    error: err.message || 'Error interno del servidor'
+  });
+});
+*/
 app.use(manejoDeErroresGlobales); // Manejo de errores globales
 
 app.listen(PORT, async (err) => {
