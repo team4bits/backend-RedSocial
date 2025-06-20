@@ -21,7 +21,11 @@ const postSchema = new mongoose.Schema(
         imagenes: [{
             type: Schema.Types.ObjectId,
             ref: 'Archive',
-        }]
+        }],
+        comments: [{
+                type: Schema.Types.ObjectId,
+                ref: 'Comment'
+            }]
     },
     {
         collection: "posts",

@@ -8,13 +8,6 @@ const router = Router();
 router.get('/',
     commentController.getComments
 );
-
-//Crear un nuevo comentario con parametros
-router.post('/post/:postId/user/:userId',
-    commentMiddleware.postVerify,
-    commentMiddleware.userVerify,
-    commentController.createCommentWithParams
-)
 //Crear un nuevo comentario con body
 router.post('/',
     commentMiddleware.postIdInBodyVerify,

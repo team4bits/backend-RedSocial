@@ -1,4 +1,4 @@
-const {Comment, Post} = require('../models');
+const {Comment, Post, User} = require('../models');
 
 const {redisClient} = require('../config/redisClient')
 
@@ -17,6 +17,21 @@ const getComments = async (_,res) => {
     res.status(200).json(comments);
     
 }
+//Obtener un comentario por id -> getCommentById
+const getCommentById = async (req, res) => {
+    /*
+        Obtener un comentario por id
+        req.params.id -> id del comentario
+        Guardar el comentario en la cache con la key: comment:<commentId>
+    */
+    const commentId = req.params.id;//Obtiene el id del comentario
+    const cached = await getModelByIdCache(Comment, commentId);//Obtiene el comentario de la cache
+    //Si está cacheado, lo asigna a comment, sinó lo busca en la base de datos
+    const comment = cached ? JSON.parse(cached) : await Comment.findById(commentId);
+    //Guardar el comentario en la cache con la key: comment:commentId
+    await redisClient.set(`comment:${commentId}`, JSON.stringify(comment), { EX: 300 });
+    res.status(200).json(comment);
+};
 //Obtener todos los comentarios de un post -> getPostComments No probado
 const getPostComments = async (req, res) => {
     /*
@@ -45,25 +60,21 @@ const getPostComments = async (req, res) => {
 //Crear un nuevo comentario con body-> createComment
 const createComment = async (req, res) => {
     const comment = await Comment.create(req.body);//Crear el comentario
+    //Agregar el comentario al post
+    await Post.findByIdAndUpdate(req.body.postId, {
+        $push: { comments: comment._id }
+    });
+    //Agregar el comentario al usuario
+    await User.findByIdAndUpdate(req.body.userId, {
+        $push: { comments: comment._id }
+    });
+    //Guardar el comentario en la cache con la key: comment:<commentId>
+    await redisClient.set(`comment:${comment._id}`, JSON.stringify(comment), { EX: 300 });
+    //Eliminar los comentarios de la cache
+    //Esto es necesario para que al crear un comentario, se actualicen los comentarios en la cache
     deleteModelsCache(Comment);
     res.status(201).json({
         message: 'Comentario creado',
-        comment
-    });
-}
-//Crear un nuevo comentario con parametros -> createCommentWithParams
-const createCommentWithParams = async (req, res) => {
-    //Se verifican los id de post y usuario en los middlewares
-    const comentario = {
-        postId: req.params.postId, //Id del post
-        userId: req.params.userId, //Id del usuario
-        content: req.body.content //Contenido del comentario
-    }
-    const comment = await Comment.create(comentario);
-    //Eliminar los comentarios de la cache
-    deleteModelsCache(Comment);
-    res.status(201).json({
-        message: 'Comentario creado con parametros',
         comment
     });
 }
@@ -103,21 +114,6 @@ const deleteComment = async (req, res) => {
     });
     
 }
-//Obtener un comentario por id -> getCommentById
-const getCommentById = async (req, res) => {
-    /*
-        Obtener un comentario por id
-        req.params.id -> id del comentario
-        Guardar el comentario en la cache con la key: comment:<commentId>
-    */
-    const commentId = req.params.id;//Obtiene el id del comentario
-    const cached = await getModelByIdCache(Comment, commentId);//Obtiene el comentario de la cache
-    //Si está cacheado, lo asigna a comment, sinó lo busca en la base de datos
-    const comment = cached ? JSON.parse(cached) : await Comment.findById(commentId);
-    //Guardar el comentario en la cache con la key: comment:commentId
-    await redisClient.set(`comment:${commentId}`, JSON.stringify(comment), { EX: 300 });
-    res.status(200).json(comment);
-};
 
 module.exports ={
     getComments,
