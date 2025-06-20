@@ -42,7 +42,7 @@ const getPostComments = async (req, res) => {
         res.status(500).json({error: error.message})
     }
 }
-//Crear un nuevo comentario -> createComment
+//Crear un nuevo comentario con body-> createComment
 const createComment = async (req, res) => {
     const comment = await Comment.create(req.body);//Crear el comentario
     deleteModelsCache(Comment);
@@ -51,6 +51,23 @@ const createComment = async (req, res) => {
         comment
     });
 }
+//Crear un nuevo comentario con parametros -> createCommentWithParams
+const createCommentWithParams = async (req, res) => {
+    //Se verifican los id de post y usuario en los middlewares
+    const comentario = {
+        postId: req.params.postId, //Id del post
+        userId: req.params.userId, //Id del usuario
+        content: req.body.content //Contenido del comentario
+    }
+    const comment = await Comment.create(comentario);
+    //Eliminar los comentarios de la cache
+    deleteModelsCache(Comment);
+    res.status(201).json({
+        message: 'Comentario creado con parametros',
+        comment
+    });
+}
+
 //Actualizar un comentario por id -> updateComment
 const updateComment = async (req,res) => {
     /*
@@ -107,6 +124,7 @@ module.exports ={
     getPostComments,
     getCommentById,
     createComment,
+    createCommentWithParams,
     updateComment,
     deleteComment
 }
