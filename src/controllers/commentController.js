@@ -120,7 +120,6 @@ module.exports ={
     getPostComments,
     getCommentById,
     createComment,
-    createCommentWithParams,
     updateComment,
     deleteComment
 }
