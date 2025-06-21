@@ -33,9 +33,9 @@ const updatePostById = async (req, res) => {
 
 const deletePostById = async (req, res) => {
     const postId = req.params.id;
-    await Archive.deleteMany({ post: postId });
-    await Comment.deleteMany({ post: postId });
-    await Tag.deleteMany({ post: postId });
+    await Archive.deleteMany({ postId: postId });
+    await Comment.deleteMany({ postId: postId });
+    await Tag.deleteMany({ postId: postId });
     await Post.findByIdAndDelete(postId);
     await deleteModelByIdCache(Post, postId);
     await deleteModelsCache(Post); // Lo mismo que en update

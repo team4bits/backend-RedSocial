@@ -31,8 +31,8 @@ const updateUserById = async (req, res) => {
 
 const deleteById = async (req, res) => {
     const userId = req.params.id;
-    await Post.deleteMany({ user: userId });
-    await Comment.deleteMany({ user: userId });
+    await Post.deleteMany({ userId: userId });
+    await Comment.deleteMany({ userId: userId });
     await User.findByIdAndDelete(userId);
     await deleteModelByIdCache(User, userId);
     await deleteModelsCache(User);
