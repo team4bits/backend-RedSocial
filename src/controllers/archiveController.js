@@ -1,6 +1,7 @@
 const Archive = require("../models/archive");
+const Post = require("../models/post");
 const { getModelsCache } = require("./genericController");
-const { redisClient }  = require('../config/redisClient');
+const { redisClient } = require('../config/redisClient');
 
 
 const getArchives = async (req, res) => {
@@ -25,6 +26,11 @@ const createArchives = async (req, res) => {
         })
       )
     );
+
+    // Agrega las referencias de los archivos al post
+    const archiveIds = nuevasEntradas.map(entry => entry._id);
+    await Post.findByIdAndUpdate(postId, { $push: { imagenes: { $each: archiveIds } } });
+
     await redisClient.sendCommand(['DEL', 'archives:todos']);
     //await redisClient.del('archives_all'); // version vieja de redis
     res.status(201).json(nuevasEntradas);
@@ -58,6 +64,13 @@ const deleteById = async (req, res) => {
       return res.status(404).json({ error: 'Archivo no encontrado' });
     }
     await archive.deleteOne();
+
+    // Eliminar la referencia del archivo en el post
+    await Post.findByIdAndUpdate(
+      archive.postId,
+      { $pull: { imagenes: archive._id } }
+    );
+
     //REDIS - ELIMINAR CACHE
     await redisClient.del('archives_all');
 
@@ -67,29 +80,31 @@ const deleteById = async (req, res) => {
   }
 };
 
-module.exports = { getArchives,
-   //createArchive,
-   createArchives,
-   updateArchive, deleteById };
+module.exports = {
+  getArchives,
+  //createArchive,
+  createArchives,
+  updateArchive, deleteById
+};
 
 
-   /*
+/*
 // Crear un solo archivo (con imagen pasada por body, no multer)
 const createArchive = async (req, res) => {
-  try {
-    const postId = req.params.id;
-    const { imagen } = req.body;
+try {
+ const postId = req.params.id;
+ const { imagen } = req.body;
 
-    const newArchive = await Archive.create({
-      imagen,
-      postId,
-    });
-    //REDIS - ELIMINAR CACHE
-    await redisClient.del('archives_all');
+ const newArchive = await Archive.create({
+   imagen,
+   postId,
+ });
+ //REDIS - ELIMINAR CACHE
+ await redisClient.del('archives_all');
 
-    res.status(201).json(newArchive);
-  } catch (e) {
-    res.status(400).json({ error: e.message });
-  }
+ res.status(201).json(newArchive);
+} catch (e) {
+ res.status(400).json({ error: e.message });
+}
 };
 */
