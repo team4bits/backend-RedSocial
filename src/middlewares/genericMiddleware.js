@@ -15,13 +15,13 @@ const existsModelById = (modelo) => {
     return async (req, res, next) => {
         try {
             const id = req.params.id;
-            const cached = await redisClient.get(`${modelo.name}:${id}`);
+            const cached = await redisClient.get(`${modelo.modelName}:${id}`);
             if (!cached) {
                 const data = await modelo.findById(id);
                 if (!data) {
                     return res
                         .status(404)
-                        .json({ message: `${modelo.name} con id ${id} no se encuentra registrado en la base de datos` });
+                        .json({ message: `${modelo.modelName} con id ${id} no se encuentra registrado en la base de datos` });
                 }
             }
         } catch (error) {

@@ -13,6 +13,8 @@ require('dotenv').config()
 const app = express()
 const PORT = process.env.PORT || 3000
 
+const cors = require('cors');
+
 // Middleware
 app.use(express.json())
 app.use(genericMiddleware.logRequest); // se utiliza para corroborar las peticiones (url, metodo y que se envia)
@@ -26,6 +28,7 @@ app.use('/posts', postRoute);
 app.use("/tags", tagRoute);
 app.use("/archives", archiveRoute);
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocumentation));
+app.use(cors({origin: 'http://localhost:5173'}))
 
 /*
 como el usuario es el que crea los posts y los comments, desde esa ruta y controlador se deberia manejar 
