@@ -4,20 +4,39 @@ const { archiveController } = require("../controllers");
 const { archiveMiddleware } = require("../middlewares");
 const upload = require('../middlewares/upload');
 
-router.get('/', archiveController.getArchives);
+router.get('/', 
+  /* 
+    #swagger.tags = ['Archives']
+    #swagger.path = '/archives'
+    */ 
+  archiveController.getArchives);
 
 router.post('/',
+  /* 
+    #swagger.tags = ['Archives']
+    #swagger.path = '/archives'
+    */
   upload.array('imagenes', 5),
   archiveMiddleware.validarArchivos,
   archiveController.createArchives
 );
 
-router.put('/:id', archiveMiddleware.sinId
+router.put('/:id', 
+  /* 
+    #swagger.tags = ['Archives']
+    #swagger.path = '/archives/{id}'
+    */
+  archiveMiddleware.sinId
     , upload.single('imagenes')
     , archiveMiddleware.validarArchivos
     , archiveController.updateArchive);
 
-router.delete('/:id', archiveMiddleware.sinId
+router.delete('/:id', 
+  /* 
+    #swagger.tags = ['Archives']
+    #swagger.path = '/archives/{id}'
+    */
+  archiveMiddleware.sinId
     , archiveController.deleteById);
 
 module.exports = router;
