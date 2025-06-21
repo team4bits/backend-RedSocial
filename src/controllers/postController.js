@@ -11,7 +11,7 @@ const getPosts = async (_, res) => {
 
 const getPostById = async (req, res) => {
     const cached = await getModelByIdCache(Post, req.params.id)   //Intenta obtener el post del cache
-    const post = cached ? JSON.parse(cached) : await Post.findById(req.params.id).populate('comments');  //Si no está en el cache, lo busca en la base de datos
+    const post = cached ? JSON.parse(cached) : await Post.findById(req.params.id).populate('comments').populate('tags');  //Si no está en el cache, lo busca en la base de datos
     await redisClient.set(`post:${req.params.id}`, JSON.stringify(post), { EX: 300 })  // Guarda el post en el cache con una expiración de 300 segundos
     res.status(200).json(post);
 };
@@ -42,4 +42,18 @@ const deletePostById = async (req, res) => {
     res.status(200).json({ message: "Post eliminado correctamente" });
 };
 
-module.exports = { getPosts, getPostById, createPost, updatePostById, deletePostById };
+const actualizarTag = (metodo) => {
+    return async (req, res) => {  
+            if (metodo == "agregar"){
+                await Post.findByIdAndUpdate(req.params.postId, { $push: { tags: req.params.tagId } }, { new: true });
+            } else {
+                await Post.findByIdAndUpdate(req.params.postId, { $pull: { tags: req.params.tagId } }, { new: true });
+            }
+            await deleteModelByIdCache(Post, req.params.id) 
+            await deleteModelsCache(Post)
+            res.status(200).json({ message: `Tag ${metodo == "agregar" ? "agregado" : "eliminado"} correctamente` });
+        
+    }
+}
+
+module.exports = { getPosts, getPostById, createPost, updatePostById, deletePostById, actualizarTag };
