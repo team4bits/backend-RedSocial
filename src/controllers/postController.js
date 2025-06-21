@@ -1,5 +1,5 @@
 const { Post, Comment, Archive, Tag, User } = require("../models");
-const { redisClient }  = require('../config/redisClient')
+const { redisClient } = require('../config/redisClient')
 const { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache } = require("./genericController")
 
 const getPosts = async (_, res) => {
@@ -25,10 +25,10 @@ const createPost = async (req, res) => {
 };
 
 const updatePostById = async (req, res) => {
-    await Post.findByIdAndUpdate(req.params.id, req.body, {new: true})
-    await deleteModelByIdCache(Post, req.params.id) 
+    await Post.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    await deleteModelByIdCache(Post, req.params.id)
     await deleteModelsCache(Post) // Borro ambos caches, el de un post en particular y el de todos los posts para garantizar que la información sea borrada
-    res.status(200).json({ message: "Post actualizado correctamente" }); 
+    res.status(200).json({ message: "Post actualizado correctamente" });
 };
 
 const deletePostById = async (req, res) => {

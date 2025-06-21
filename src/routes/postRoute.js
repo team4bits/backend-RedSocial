@@ -1,7 +1,7 @@
 const { Router } = require('express')
-const { postController } = require("../controllers");
+const { postController, archiveController } = require("../controllers");
 const { genericMiddleware, postMiddleware } = require("../middlewares");
-const { Post } = require("../models");
+const { Post, Archive } = require("../models");
 const router = Router()
 
 router.get('/',
@@ -68,5 +68,26 @@ router.delete(
   */
   postController.actualizarTag("eliminar")
 );
+
+//Rutas Archive
+router.delete("/:postId/image/:id",
+  genericMiddleware.existsModelById(Archive),
+  postMiddleware.validarImagenAsociadaAPost,
+  /* 
+    #swagger.tags = ['Post Image']
+    #swagger.path = '/posts/{postId}/tags/{id}'
+  */
+  archiveController.deleteById
+);
+
+  router.put("/:postId/image/:id",
+    genericMiddleware.existsModelById(Archive),
+    postMiddleware.validarImagenAsociadaAPost,
+    /* 
+    #swagger.tags = ['Post Image']
+    #swagger.path = '/posts/{postId}/tags/{id}'
+    */
+    archiveController.updateArchive
+  );
 
 module.exports = router;
