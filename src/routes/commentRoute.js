@@ -1,6 +1,6 @@
 const {Router} = require('express');
 const {commentController} = require('../controllers');
-const {genericMiddleware} = require('../middlewares');
+const {genericMiddleware, commentMiddleware} = require('../middlewares');
 const {Comment} = require('../models');
 const router = Router();
 
@@ -8,11 +8,13 @@ const router = Router();
 router.get('/',
     commentController.getComments
 );
-
-//Crear un nuevo comentario
+//Crear un nuevo comentario con body
 router.post('/',
+    commentMiddleware.postIdInBodyVerify,
+    commentMiddleware.userIdInBodyVerify,
     commentController.createComment
-)
+);
+
 //Actualizar un comentario por id
 router.put('/:id',
     genericMiddleware.existsModelById(Comment),

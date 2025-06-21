@@ -1,4 +1,4 @@
-const { Post, Comment, Archive, Tag } = require("../models");
+const { Post, Comment, Archive, Tag, User } = require("../models");
 const { redisClient }  = require('../config/redisClient')
 const { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache } = require("./genericController")
 
@@ -18,6 +18,8 @@ const getPostById = async (req, res) => {
 
 const createPost = async (req, res) => {
     const post = await Post.create(req.body);
+    //Agrega el id del post al array de post del usuario
+    await User.findByIdAndUpdate(req.body.userId, { $push: { posts: post._id } });
     deleteModelsCache(Post) // Elimina el cache de todos los posts, ya que se ha creado uno nuevo por ende el cache esta desactualizado
     res.status(201).json(post);
 };
@@ -31,9 +33,9 @@ const updatePostById = async (req, res) => {
 
 const deletePostById = async (req, res) => {
     const postId = req.params.id;
-    await Archive.deleteMany({ post: postId });
-    await Comment.deleteMany({ post: postId });
-    await Tag.deleteMany({ post: postId });
+    await Archive.deleteMany({ postId: postId });
+    await Comment.deleteMany({ postId: postId });
+    await Tag.deleteMany({ postId: postId });
     await Post.findByIdAndDelete(postId);
     deleteModelByIdCache(Post, postId);
     deleteModelsCache(Post); // Lo mismo que en update

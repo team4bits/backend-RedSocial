@@ -10,7 +10,7 @@ const getUsers = async (_, res) => {
 };
 
 const getUserById = async (req, res) => {
-    const cached = getModelByIdCache(User, req.params.id)
+    const cached = await getModelByIdCache(User, req.params.id)
     const user = cached ? JSON.parse(cached) : await User.findById(req.params.id);
     await redisClient.set(`user:${req.params.id}`, JSON.stringify(user), { EX: 300 })
     res.status(200).json(user);
@@ -31,8 +31,8 @@ const updateUserById = async (req, res) => {
 
 const deleteById = async (req, res) => {
     const userId = req.params.id;
-    await Post.deleteMany({ user: userId });
-    await Comment.deleteMany({ user: userId });
+    await Post.deleteMany({ userId: userId });
+    await Comment.deleteMany({ userId: userId });
     await User.findByIdAndDelete(userId);
     deleteModelByIdCache(User, userId);
     deleteModelsCache(User);
