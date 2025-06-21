@@ -4,14 +4,14 @@ const { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCac
 
 const getUsers = async (_, res) => {
     const cached = await getModelsCache(User)
-    const users = cached ? JSON.parse(cached) : await User.find();
+    const users = cached ? JSON.parse(cached) : await User.find().populate('posts').populate('comments');
     await redisClient.set('users:todos', JSON.stringify(users), { EX: 300 })
     res.status(200).json(users);
 };
 
 const getUserById = async (req, res) => {
     const cached = await getModelByIdCache(User, req.params.id)
-    const user = cached ? JSON.parse(cached) : await User.findById(req.params.id);
+    const user = cached ? JSON.parse(cached) : await User.findById(req.params.id).populate('posts').populate('comments');
     await redisClient.set(`user:${req.params.id}`, JSON.stringify(user), { EX: 300 })
     res.status(200).json(user);
 };

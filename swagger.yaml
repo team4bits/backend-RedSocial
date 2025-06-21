@@ -11,6 +11,7 @@ tags:
   - name: Posts
   - name: Comments
   - name: Archives
+  - name: Post Tag
 schemes:
   - http
 paths:
@@ -86,19 +87,51 @@ paths:
           description: OK
         '404':
           description: Not Found
-  /comments/:
+  /comments:
     get:
+      tags:
+        - Comments
       description: ''
       responses:
         '200':
           description: OK
     post:
+      tags:
+        - Comments
       description: ''
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              postId:
+                example: any
+              userId:
+                example: any
       responses:
         '201':
           description: Created
+        '400':
+          description: Bad Request
   /comments/{id}:
+    get:
+      tags:
+        - Comments
+      description: ''
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
     put:
+      tags:
+        - Comments
       description: ''
       parameters:
         - name: id
@@ -111,18 +144,8 @@ paths:
         '404':
           description: Not Found
     delete:
-      description: ''
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
-    get:
+      tags:
+        - Comments
       description: ''
       parameters:
         - name: id
@@ -279,13 +302,17 @@ paths:
           description: OK
         '404':
           description: Not Found
-  /archives/:
+  /archives:
     get:
+      tags:
+        - Archives
       description: ''
       responses:
         '200':
           description: OK
     post:
+      tags:
+        - Archives
       description: ''
       parameters:
         - name: body
@@ -302,6 +329,8 @@ paths:
           description: Bad Request
   /archives/{id}:
     put:
+      tags:
+        - Archives
       description: ''
       parameters:
         - name: id
@@ -318,6 +347,8 @@ paths:
         '500':
           description: Internal Server Error
     delete:
+      tags:
+        - Archives
       description: ''
       parameters:
         - name: id
@@ -333,69 +364,3 @@ paths:
           description: Not Found
         '500':
           description: Internal Server Error
-  /:
-    get:
-      description: ''
-      responses:
-        '200':
-          description: OK
-    post:
-      description: ''
-      parameters:
-        - name: body
-          in: body
-          schema:
-            type: object
-            properties:
-              postId:
-                example: any
-      responses:
-        '201':
-          description: Created
-        '400':
-          description: Bad Request
-  /{id}:
-    put:
-      description: ''
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-      responses:
-        '200':
-          description: OK
-        '400':
-          description: Bad Request
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-    delete:
-      description: ''
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-      responses:
-        '200':
-          description: OK
-        '400':
-          description: Bad Request
-        '404':
-          description: Not Found
-        '500':
-          description: Internal Server Error
-    get:
-      description: ''
-      parameters:
-        - name: id
-          in: path
-          required: true
-          type: string
-      responses:
-        '200':
-          description: OK
-        '404':
-          description: Not Found
