@@ -1,5 +1,6 @@
-const { Post, User, Archive } = require('../models');
+const { Post, User, Tag, Archive } = require('../models');
 const { errorPersonalizado } = require('./genericMiddleware');
+const { getModelByIdCache } = require('../controllers/genericController');
 
 const existUserRequest = async (req, res, next) => {
     try {
@@ -44,21 +45,24 @@ const validarImagenAsociadaAPost = async (req, res, next) => {
     }
 }
 
-// const existsPostYTagPorId = async (req, res, next) => {
-//         try{
-//             const {postId, tagId} = req.params;
-//             const postToUpdate = await Post.findByPk(postId);
-//             const tagToUpdate = await Tag.findByPk(tagId);
-//             if (!postToUpdate || !tagToUpdate) {
-//             let modelo = !postToUpdate ? "Post" : "Tag";
-//             return res.status(404).json({ error: `${modelo} no encontrado` });
-//             }
-//         } catch (error) {
-//             return status500(res,error);
-//         }
-//         next();
-//     };
+const existsPostYTagPorId = async (req, res, next) => {
+        try{
+            const {postId, tagId} = req.params;
 
+            const postCached = await getModelByIdCache(Post, postId);
+            const postToUpdate = postCached ? JSON.parse(postCached) : await Post.findById(postId);
 
+            const tagCached = await getModelByIdCache(Tag, tagId);
+            const tagToUpdate = tagCached ? JSON.parse(tagCached) : await Tag.findById(tagId);
 
-module.exports = { existUserRequest, userDoesntChange, validarImagenAsociadaAPost };
+            if (!postToUpdate || !tagToUpdate) {
+                let modelo = !postToUpdate ? "Post" : "Tag";
+                return errorPersonalizado(`${modelo} no encontrado` , 404, next);
+            }
+            next();
+         } catch (error) {
+            next(error);
+        }
+    };
+
+module.exports = { existUserRequest, userDoesntChange, existsPostYTagPorId, validarImagenAsociadaAPost };

@@ -49,13 +49,33 @@ router.delete("/:id",
   postController.deletePostById
 );
 
+router.post(
+  '/:postId/tags/:tagId',
+  postMiddleware.existsPostYTagPorId,
+  /* 
+    #swagger.tags = ['Post Tag']
+    #swagger.path = '/posts/{postId}/tags/{tagId}'
+  */
+  postController.actualizarTag("agregar")
+);
+
+router.delete(
+  '/:postId/tags/:tagId',
+  postMiddleware.existsPostYTagPorId,
+  /* 
+    #swagger.tags = ['Post Tag']
+    #swagger.path = '/posts/{postId}/tags/{tagId}'
+  */
+  postController.actualizarTag("eliminar")
+);
+
 //Rutas Archive
 router.delete("/:postId/image/:id",
   genericMiddleware.existsModelById(Archive),
   postMiddleware.validarImagenAsociadaAPost,
   /* 
     #swagger.tags = ['Post Image']
-    #swagger.path = '/posts/{id}/tags/{idImage}'
+    #swagger.path = '/posts/{postId}/tags/{id}'
   */
   archiveController.deleteById
 );
@@ -65,7 +85,7 @@ router.delete("/:postId/image/:id",
     postMiddleware.validarImagenAsociadaAPost,
     /* 
     #swagger.tags = ['Post Image']
-    #swagger.path = '/posts/{id}/tags/{idImage}'
+    #swagger.path = '/posts/{postId}/tags/{id}'
     */
     archiveController.updateArchive
   );

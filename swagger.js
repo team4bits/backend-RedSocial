@@ -26,6 +26,7 @@ const doc = {
       { name: 'Comments'},
       { name: 'Archives'},
       { name: 'Post Tag'},
+      { name: 'Post Image'}
     ]
 };
 
