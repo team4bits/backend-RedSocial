@@ -12,7 +12,7 @@ const tagSchema = new mongoose.Schema(
     posts:[{
                 type: Schema.Types.ObjectId,
                 ref: 'Post'
-            }]
+    }]
   },
   {
     collection: "tags",
@@ -20,10 +20,9 @@ const tagSchema = new mongoose.Schema(
 );
 
 tagSchema.set("toJSON", {
-  virtuals: true,
   transform: (_, ret) => {
     delete ret.__v;
-    delete ret._id;
+    //delete ret._id;
   },
 });
 

@@ -232,6 +232,39 @@ paths:
           description: OK
         '404':
           description: Not Found
+  /posts/{postId}/tags/{tagId}:
+    post:
+      tags:
+        - Post Tag
+      description: ''
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          type: string
+        - name: tagId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+        - Post Tag
+      description: ''
+      parameters:
+        - name: postId
+          in: path
+          required: true
+          type: string
+        - name: tagId
+          in: path
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
   /tags:
     get:
       tags:
