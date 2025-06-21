@@ -24,7 +24,8 @@ const doc = {
       { name: 'Tags'},
       { name: 'Posts'},
       { name: 'Comments'},
-      { name: 'Archives'}
+      { name: 'Archives'},
+      { name: 'Post Tag'},
     ]
 };
 

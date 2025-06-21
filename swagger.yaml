@@ -11,6 +11,7 @@ tags:
   - name: Posts
   - name: Comments
   - name: Archives
+  - name: Post Tag
 schemes:
   - http
 paths:
@@ -94,9 +95,21 @@ paths:
           description: OK
     post:
       description: ''
+      parameters:
+        - name: body
+          in: body
+          schema:
+            type: object
+            properties:
+              postId:
+                example: any
+              userId:
+                example: any
       responses:
         '201':
           description: Created
+        '400':
+          description: Bad Request
   /comments/{id}:
     put:
       description: ''
