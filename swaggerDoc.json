@@ -146,8 +146,11 @@
         }
       }
     },
-    "/comments/": {
+    "/comments": {
       "get": {
+        "tags": [
+          "Comments"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -156,6 +159,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Comments"
+        ],
         "description": "",
         "parameters": [
           {
@@ -185,7 +191,32 @@
       }
     },
     "/comments/{id}": {
+      "get": {
+        "tags": [
+          "Comments"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
       "put": {
+        "tags": [
+          "Comments"
+        ],
         "description": "",
         "parameters": [
           {
@@ -205,25 +236,9 @@
         }
       },
       "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
+        "tags": [
+          "Comments"
         ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          }
-        }
-      },
-      "get": {
         "description": "",
         "parameters": [
           {
@@ -476,8 +491,11 @@
         }
       }
     },
-    "/archives/": {
+    "/archives": {
       "get": {
+        "tags": [
+          "Archives"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -486,6 +504,9 @@
         }
       },
       "post": {
+        "tags": [
+          "Archives"
+        ],
         "description": "",
         "parameters": [
           {
@@ -513,6 +534,9 @@
     },
     "/archives/{id}": {
       "put": {
+        "tags": [
+          "Archives"
+        ],
         "description": "",
         "parameters": [
           {
@@ -538,6 +562,9 @@
         }
       },
       "delete": {
+        "tags": [
+          "Archives"
+        ],
         "description": "",
         "parameters": [
           {
@@ -559,112 +586,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/": {
-      "get": {
-        "description": "",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "postId": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/{id}": {
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
           }
         }
       }
