@@ -12,6 +12,13 @@ const conectarRedis = async () => {
         await redisClient.connect();
         console.log('Conectado correctamente a Redis');
         isConnected = true;
+        //Borrar el contenido de la cache al iniciar el servidor
+        try {
+            await redisClient.flushAll();
+            console.log('Cache de Redis limpiada');
+        } catch (error) {
+            console.error('Error al limpiar la cache de Redis:', error);
+        }
     }
 }
 
