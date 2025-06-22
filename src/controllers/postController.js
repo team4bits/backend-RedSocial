@@ -38,6 +38,8 @@ const updatePostById = async (req, res) => {
 
 const deletePostById = async (req, res) => {
     const postId = req.params.id;
+    //Obtener el post en una constante
+    const post = await Post.findById(postId);
     await Archive.deleteMany({ postId: postId });
     await Comment.deleteMany({ postId: postId });
     await Tag.deleteMany({ postId: postId });
@@ -45,19 +47,27 @@ const deletePostById = async (req, res) => {
     await deleteModelByIdCache(Post, postId);
     await deleteManyModelsCache([User, Post])//Borro cache de modelo actual y de padre
     //Borrar el post del usuario que lo creó
-    await User.findOneAndUpdate({ posts: postId }, { $pull: { posts: postId } })
+    await User.findByIdAndUpdate(
+        post.userId, //El id del usuario que creó el post
+        {
+            $pull: {
+                posts: postId, //Elimina el post del array de posts del usuario
+                comments: { $in: post.comments } //Elimina los comentarios del post del array de comentarios del usuario
+            }
+        }
+    )
     res.status(200).json({ message: "Post eliminado correctamente" });
 };
 
 const actualizarTag = (metodo) => {
-    return async (req, res) => {  
-            if (metodo == "agregar"){
-                await Post.findByIdAndUpdate(req.params.postId, { $push: { tags: req.params.tagId } }, { new: true });
-                await Tag.findByIdAndUpdate(req.params.tagId, { $push: { posts: req.params.postId } }, { new: true });
-            } else {
-                await Post.findByIdAndUpdate(req.params.postId, { $pull: { tags: req.params.tagId } }, { new: true });
-                await Tag.findByIdAndUpdate(req.params.tagId, { $pull: { posts: req.params.postId } }, { new: true });
-            }
+    return async (req, res) => {
+        if (metodo == "agregar") {
+            await Post.findByIdAndUpdate(req.params.postId, { $push: { tags: req.params.tagId } }, { new: true });
+            await Tag.findByIdAndUpdate(req.params.tagId, { $push: { posts: req.params.postId } }, { new: true });
+        } else {
+            await Post.findByIdAndUpdate(req.params.postId, { $pull: { tags: req.params.tagId } }, { new: true });
+            await Tag.findByIdAndUpdate(req.params.tagId, { $pull: { posts: req.params.postId } }, { new: true });
+        }
             await deleteModelByIdCache(Post, req.params.id) 
             await deleteManyModelsCache([User, Post])//Borro cache de modelo actual y de padre
             res.status(200).json({ message: `Tag ${metodo == "agregar" ? "agregado" : "eliminado"} correctamente` });
