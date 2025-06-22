@@ -1,6 +1,7 @@
+
 const { User } = require('../models');
 
-const { status500 } = require("./genericMiddleware")
+const { errorPersonalizado } = require('./genericMiddleware');
 
 const notExistsUser= async (req, res, next) => {
     try {
@@ -8,12 +9,10 @@ const notExistsUser= async (req, res, next) => {
         const userByEmail = await User.findOne({ email: req.body.email  });
         if (userByNickName || userByEmail ) {
             let atributo = userByNickName ? `nickName ${ req.body.nickName }` : `email ${ req.body.email }`;
-            return res
-                .status(400)
-                .json({ message: `El ${ atributo } ya se encuentra registrado` });
+            return errorPersonalizado(`El ${ atributo } ya se encuentra registrado`, 400, next);
         }    
     } catch (error) {
-        return status500(res, error);
+        next(error);
     }
     next();
 };
