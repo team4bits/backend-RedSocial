@@ -1,5 +1,5 @@
 const { mongoose } = require("../config/db");
-const { Schema } = mongoose;
+const { Schema } = require("mongoose");
 
 const archiveSchema = new Schema(
   {
