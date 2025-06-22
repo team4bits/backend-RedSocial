@@ -5,19 +5,7 @@ const { archiveMiddleware } = require("../middlewares");
 const upload = require('../middlewares/upload');
 
 router.get('/', archiveController.getArchives);
-
-router.post('/',
-  upload.array('imagenes', 5),
-  archiveMiddleware.validarArchivos,
-  archiveController.createArchives
-);
-
-router.put('/:id', archiveMiddleware.sinId
-    , upload.single('imagenes')
-    , archiveMiddleware.validarArchivos
-    , archiveController.updateArchive);
-
-router.delete('/:id', archiveMiddleware.sinId
-    , archiveController.deleteById);
-
+router.post('/', upload.array('imagenes', 5), archiveMiddleware.sinPostID, archiveController.createArchives);
+router.put('/:id', archiveMiddleware.archiveById, upload.single('imagenes'), archiveController.updateArchive);
+router.delete('/:id', archiveMiddleware.archiveById, archiveController.deleteById);
 module.exports = router;

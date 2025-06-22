@@ -1,3 +1,4 @@
+const multer = require('multer');
 const { redisClient } = require('../config/redisClient');
 const logRequest = (req, _, next) => {
     console.log({ method: req.method, url: req.url, fechaHora: new Date(), body: req.body, params: req.params });
@@ -59,12 +60,15 @@ const manejoDeErroresGlobales = ((err, req, res, next) => {
         const messages = Object.values(err.errors).map(e => e.message); //Extraes SOLO los mensajes de errores de validación moongose (del modelo)
         return res.status(400).json({ error: messages });
     }
+    if (err instanceof multer.MulterError) {       
+        if (err.code === 'LIMIT_FILE_SIZE') {return res.status(400).json({ error: 'La imagen excede el tamaño máximo permitido de 5MB' })}
+        //if (err.code === 'LIMIT_UNEXPECTED_FILE') { return res.status(400).json({ error: err.message || 'Tipo de archivo no permitido' })} no lo puedo hacer andar
+        return res.status(400).json({ error: err.message });
+    }
     if (err.status) {
         return res.status(err.status).json({ error: err.message });  //Retorna el error con el status y mensaje que se le envié por middleware o controlador
     }
     res.status(500).json({ error: 'Error interno del servidor' });  //
 });
-
-
 
 module.exports = { logRequest, existsModelById, status500, existsAnyByModel, manejoDeErroresGlobales, errorPersonalizado };
