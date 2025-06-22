@@ -13,7 +13,7 @@ const getUserById = async (req, res) => {
     const cached = await getModelByIdCache(User, req.params.id)
     const user = cached ? JSON.parse(cached) : await User.findById(req.params.id).populate({ path: 'posts', select: 'fecha content comments tags imagenes'}).populate({ path: 'comments', select: 'fecha content'});
     await redisClient.set(`User:${req.params.id}`, JSON.stringify(user), { EX: 300 })
-    res.status(200).json(user);
+    res.status(200).json({user, message: `Usuario obtenido de ${cached ? 'caché' : 'base de datos'}`});
 };
 
 const createUser = async (req, res) => {

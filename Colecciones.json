@@ -1,15 +1,15 @@
 {
     "_type": "export",
     "__export_format": 4,
-    "__export_date": "2025-05-18T23:49:26.534Z",
+    "__export_date": "2025-06-22T02:47:18.557Z",
     "__export_source": "insomnia.desktop.app:v10.1.1",
     "resources": [
         {
             "_id": "req_0dfddc226e46464981196e806934f9fe",
             "parentId": "fld_22505b4cdc0b47ea9fad719f5a9c20fb",
-            "modified": 1747543657104,
+            "modified": 1750559178556,
             "created": 1747543589375,
-            "url": "localhost:3001/users/",
+            "url": "{{ _.Host }}:{{ _.Port }}/users",
             "name": "Listar Usuarios",
             "description": "",
             "method": "GET",
@@ -21,7 +21,9 @@
                     "value": "insomnia/10.1.1"
                 }
             ],
-            "authentication": {},
+            "authentication": {
+                "type": "none"
+            },
             "metaSortKey": -1747543589375,
             "isPrivate": false,
             "pathParameters": [],
@@ -48,19 +50,19 @@
         {
             "_id": "wrk_bb0628e23de2415fbcca6172cf1f24a8",
             "parentId": null,
-            "modified": 1747543564062,
+            "modified": 1750560390121,
             "created": 1747543564062,
             "name": "Red Social",
-            "description": "",
+            "description": "Colección de Request para Red Social AntiSocial Net.\n\nDebe modificarse el host y puerto en las variables de entorno en caso de ser necesario (localhost y 3001 son los valores por defecto)",
             "scope": "collection",
             "_type": "workspace"
         },
         {
             "_id": "req_430ad42036104cfcb812a2d38efa12ec",
             "parentId": "fld_22505b4cdc0b47ea9fad719f5a9c20fb",
-            "modified": 1747545095711,
+            "modified": 1750559211922,
             "created": 1747543694482,
-            "url": "localhost:3001/users/1",
+            "url": "{{ _.Host }}:{{ _.Port }}/users/6854ae2c5de7b5dffeb2c01c",
             "name": "Mostrar Usuario",
             "description": "",
             "method": "GET",
@@ -87,15 +89,15 @@
         {
             "_id": "req_a46c4bbc46684e3890b40cbf460a2b78",
             "parentId": "fld_22505b4cdc0b47ea9fad719f5a9c20fb",
-            "modified": 1747543812530,
+            "modified": 1750559219356,
             "created": 1747543721459,
-            "url": "localhost:3001/users/",
+            "url": "{{ _.Host }}:{{ _.Port }}/users",
             "name": "Crear Usuario",
             "description": "",
             "method": "POST",
             "body": {
                 "mimeType": "application/json",
-                "text": "{\n\t\"nickName\": \"cualquiera\",\n  \"email\": \"cualquiera@loquesea.com\"\n}"
+                "text": "{\n\t\"nickName\": \"cualquiera 2\",\n  \"email\": \"cualquiera2@loquesea.com\"\n}"
             },
             "parameters": [],
             "headers": [
@@ -121,84 +123,12 @@
             "_type": "request"
         },
         {
-            "_id": "req_736b5b512fff41b1af972102e60ac627",
-            "parentId": "fld_22505b4cdc0b47ea9fad719f5a9c20fb",
-            "modified": 1747543857016,
-            "created": 1747543835644,
-            "url": "localhost:3001/users/1",
-            "name": "Modificar Usuario",
-            "description": "",
-            "method": "PUT",
-            "body": {
-                "mimeType": "application/json",
-                "text": "{\n\t\"nickName\": \"otro nick\"\n}"
-            },
-            "parameters": [],
-            "headers": [
-                {
-                    "name": "Content-Type",
-                    "value": "application/json"
-                },
-                {
-                    "name": "User-Agent",
-                    "value": "insomnia/10.1.1"
-                }
-            ],
-            "authentication": {},
-            "metaSortKey": -1735506755657,
-            "isPrivate": false,
-            "pathParameters": [],
-            "settingStoreCookies": true,
-            "settingSendCookies": true,
-            "settingDisableRenderRequestBody": false,
-            "settingEncodeUrl": true,
-            "settingRebuildPath": true,
-            "settingFollowRedirects": "global",
-            "_type": "request"
-        },
-        {
-            "_id": "req_287d14da17174ca68559a810d8fd66f9",
-            "parentId": "fld_22505b4cdc0b47ea9fad719f5a9c20fb",
-            "modified": 1747543904149,
-            "created": 1747543875739,
-            "url": "localhost:3001/users/1",
-            "name": "Modificar Usuario 2",
-            "description": "",
-            "method": "PUT",
-            "body": {
-                "mimeType": "application/json",
-                "text": "{\n\t\"email\": \"otroemail@email.com\"\n}"
-            },
-            "parameters": [],
-            "headers": [
-                {
-                    "name": "Content-Type",
-                    "value": "application/json"
-                },
-                {
-                    "name": "User-Agent",
-                    "value": "insomnia/10.1.1"
-                }
-            ],
-            "authentication": {},
-            "metaSortKey": -1734646981820,
-            "isPrivate": false,
-            "pathParameters": [],
-            "settingStoreCookies": true,
-            "settingSendCookies": true,
-            "settingDisableRenderRequestBody": false,
-            "settingEncodeUrl": true,
-            "settingRebuildPath": true,
-            "settingFollowRedirects": "global",
-            "_type": "request"
-        },
-        {
             "_id": "req_0ee78b18f3944be1ba70e6d7218b2692",
             "parentId": "fld_22505b4cdc0b47ea9fad719f5a9c20fb",
-            "modified": 1747543958371,
+            "modified": 1750559222908,
             "created": 1747543919952,
-            "url": "localhost:3001/users/1",
-            "name": "Modificar Usuario 3",
+            "url": "{{ _.Host }}:{{ _.Port }}/users/6855fc331a419fa6432c6b1a",
+            "name": "Modificar Usuario",
             "description": "",
             "method": "PUT",
             "body": {
@@ -231,9 +161,9 @@
         {
             "_id": "req_de8886c7d30e4dcba7bc7af20e82290b",
             "parentId": "fld_22505b4cdc0b47ea9fad719f5a9c20fb",
-            "modified": 1747611957452,
+            "modified": 1750559227960,
             "created": 1747543983635,
-            "url": "localhost:3001/users/2",
+            "url": "{{ _.Host }}:{{ _.Port }}/users/6855fc331a419fa6432c6b1a",
             "name": "Eliminar Usuario",
             "description": "",
             "method": "DELETE",
@@ -282,9 +212,9 @@
         {
             "_id": "req_cd90bf9b78b748a284b470dd6ced092f",
             "parentId": "fld_9cb7077a406442f7aee3de28b718e0fe",
-            "modified": 1747545061932,
+            "modified": 1750559243215,
             "created": 1747545047541,
-            "url": "localhost:3001/tags/",
+            "url": "{{ _.Host }}:{{ _.Port }}/tags/",
             "name": "Listar Tags",
             "description": "",
             "method": "GET",
@@ -311,7 +241,7 @@
         {
             "_id": "fld_9cb7077a406442f7aee3de28b718e0fe",
             "parentId": "wrk_bb0628e23de2415fbcca6172cf1f24a8",
-            "modified": 1747545047540,
+            "modified": 1750380107001,
             "created": 1747545047540,
             "name": "Tag",
             "description": "",
@@ -323,9 +253,9 @@
         {
             "_id": "req_6369650b21684357b87652630150955a",
             "parentId": "fld_9cb7077a406442f7aee3de28b718e0fe",
-            "modified": 1747545116774,
+            "modified": 1750559248799,
             "created": 1747545047542,
-            "url": "localhost:3001/tags/1",
+            "url": "{{ _.Host }}:{{ _.Port }}/tags/6855fc8a1a419fa6432c6b2f",
             "name": "Mostrar Tag",
             "description": "",
             "method": "GET",
@@ -352,15 +282,15 @@
         {
             "_id": "req_6c688a2487c84dc4b33e8c64f4436152",
             "parentId": "fld_9cb7077a406442f7aee3de28b718e0fe",
-            "modified": 1747545148732,
+            "modified": 1750559253182,
             "created": 1747545047542,
-            "url": "localhost:3001/tags/",
+            "url": "{{ _.Host }}:{{ _.Port }}/tags/",
             "name": "Crear Tag",
             "description": "",
             "method": "POST",
             "body": {
                 "mimeType": "application/json",
-                "text": "{\n\t\"tag\": \"nuevoTag\"\n}"
+                "text": "{\n\t\"tag\": \"nuevoTag 3\"\n}"
             },
             "parameters": [],
             "headers": [
@@ -388,9 +318,9 @@
         {
             "_id": "req_8fc11440c1d3424d9d7a23792f55de5c",
             "parentId": "fld_9cb7077a406442f7aee3de28b718e0fe",
-            "modified": 1747545192834,
+            "modified": 1750559256892,
             "created": 1747545047542,
-            "url": "localhost:3001/tags/3",
+            "url": "{{ _.Host }}:{{ _.Port }}/tags/6855fc8a1a419fa6432c6b2f",
             "name": "Modificar Tag",
             "description": "",
             "method": "PUT",
@@ -424,9 +354,9 @@
         {
             "_id": "req_f9356f57707341779a20733d4a756dfd",
             "parentId": "fld_9cb7077a406442f7aee3de28b718e0fe",
-            "modified": 1747545338186,
+            "modified": 1750559260593,
             "created": 1747545047544,
-            "url": "localhost:3001/tags/3",
+            "url": "{{ _.Host }}:{{ _.Port }}/tags/6855fd6c076bc9995337449a",
             "name": "Eliminar Tag",
             "description": "",
             "method": "DELETE",
@@ -475,9 +405,9 @@
         {
             "_id": "req_f913a24662dd44629cef50eea9301776",
             "parentId": "fld_59fba292b66f4b3a8e25e22817092b27",
-            "modified": 1747588840037,
+            "modified": 1750559265445,
             "created": 1747588477237,
-            "url": "localhost:3001/posts/1/tags/1",
+            "url": "{{ _.Host }}:{{ _.Port }}/posts/1/tags/1",
             "name": "Asignar Tag al Post",
             "description": "",
             "method": "POST",
@@ -535,9 +465,9 @@
         {
             "_id": "req_db82daff01e648cd97820a574cde038c",
             "parentId": "fld_59fba292b66f4b3a8e25e22817092b27",
-            "modified": 1747588775340,
+            "modified": 1750559268666,
             "created": 1747588574878,
-            "url": "localhost:3001/posts/1/tags/1",
+            "url": "{{ _.Host }}:{{ _.Port }}/posts/1/tags/1",
             "name": "Eliminar Tag del Post",
             "description": "",
             "method": "DELETE",
@@ -571,9 +501,9 @@
         {
             "_id": "req_c6d4060311994adb8dce7718c33119d5",
             "parentId": "fld_c302181c59984782835cfaf0e28efb97",
-            "modified": 1747591660879,
+            "modified": 1750559272512,
             "created": 1747591614064,
-            "url": "localhost:3001/posts/1/tags/1",
+            "url": "{{ _.Host }}:{{ _.Port }}/posts/1/tags/1",
             "name": "Agregar Imagen al Post",
             "description": "",
             "method": "PUT",
@@ -619,9 +549,9 @@
         {
             "_id": "req_4765b312df834092a86fbc83dc2b0d11",
             "parentId": "fld_c302181c59984782835cfaf0e28efb97",
-            "modified": 1747591681964,
+            "modified": 1750559276497,
             "created": 1747591614067,
-            "url": "localhost:3001/posts/1/tags/1",
+            "url": "{{ _.Host }}:{{ _.Port }}/posts/1/tags/1",
             "name": "Eliminar Imagen del Post",
             "description": "",
             "method": "DELETE",
@@ -655,9 +585,9 @@
         {
             "_id": "req_34d0d220aa184b039fc43a8890df4cc4",
             "parentId": "fld_8e0e55661a884e89b0e025a5e7e5abd8",
-            "modified": 1747586395543,
+            "modified": 1750559283454,
             "created": 1747586344811,
-            "url": "localhost:3001/posts/",
+            "url": "{{ _.Host }}:{{ _.Port }}/posts/",
             "name": "Listar Posts",
             "description": "",
             "method": "GET",
@@ -684,9 +614,9 @@
         {
             "_id": "req_fa809d98fd32443a8b201e66572ef31b",
             "parentId": "fld_8e0e55661a884e89b0e025a5e7e5abd8",
-            "modified": 1747586422183,
+            "modified": 1750559287237,
             "created": 1747586344812,
-            "url": "localhost:3001/posts/1",
+            "url": "{{ _.Host }}:{{ _.Port }}/posts/6855fe99689b9a8cb97eabc1",
             "name": "Mostrar Post",
             "description": "",
             "method": "GET",
@@ -711,53 +641,17 @@
             "_type": "request"
         },
         {
-            "_id": "req_25daa9c653604ae8b4727b5a9a188a90",
+            "_id": "req_aff5a0d84ebf48f7934c1596479a2ea6",
             "parentId": "fld_8e0e55661a884e89b0e025a5e7e5abd8",
-            "modified": 1747586792070,
-            "created": 1747586344812,
-            "url": "localhost:3001/posts/",
+            "modified": 1750559291917,
+            "created": 1747586836621,
+            "url": "{{ _.Host }}:{{ _.Port }}/posts/",
             "name": "Crear Post",
             "description": "",
             "method": "POST",
             "body": {
                 "mimeType": "application/json",
-                "text": "{\n\t\"userId\": \"1\", \n\t\"content\": \"este es un nuevo post\", \n\t\"fecha\": \"2025-03-03\"\n}"
-            },
-            "parameters": [],
-            "headers": [
-                {
-                    "name": "Content-Type",
-                    "value": "application/json"
-                },
-                {
-                    "name": "User-Agent",
-                    "value": "insomnia/10.1.1"
-                }
-            ],
-            "authentication": {},
-            "metaSortKey": -1737226303331,
-            "isPrivate": false,
-            "pathParameters": [],
-            "settingStoreCookies": true,
-            "settingSendCookies": true,
-            "settingDisableRenderRequestBody": false,
-            "settingEncodeUrl": true,
-            "settingRebuildPath": true,
-            "settingFollowRedirects": "global",
-            "_type": "request"
-        },
-        {
-            "_id": "req_aff5a0d84ebf48f7934c1596479a2ea6",
-            "parentId": "fld_8e0e55661a884e89b0e025a5e7e5abd8",
-            "modified": 1747586846867,
-            "created": 1747586836621,
-            "url": "localhost:3001/posts/",
-            "name": "Crear Post 2",
-            "description": "",
-            "method": "POST",
-            "body": {
-                "mimeType": "application/json",
-                "text": "{\n\t\"userId\": \"1\", \n\t\"content\": \"este es un nuevo post\"\n}"
+                "text": "{\n\t\"userId\": \"6854ae2c5de7b5dffeb2c01c\", \n\t\"content\": \"este es otro nuevo post\"\n}"
             },
             "parameters": [],
             "headers": [
@@ -785,9 +679,9 @@
         {
             "_id": "req_9477d789b59a4d5aa42c93653932e96d",
             "parentId": "fld_8e0e55661a884e89b0e025a5e7e5abd8",
-            "modified": 1747588267285,
+            "modified": 1750559295064,
             "created": 1747586344813,
-            "url": "localhost:3001/posts/6",
+            "url": "{{ _.Host }}:{{ _.Port }}/posts/6",
             "name": "Modificar Post",
             "description": "",
             "method": "PUT",
@@ -821,9 +715,9 @@
         {
             "_id": "req_a538e9981e8a47eab5a7013c7f2fa67b",
             "parentId": "fld_8e0e55661a884e89b0e025a5e7e5abd8",
-            "modified": 1747588403850,
+            "modified": 1750559299246,
             "created": 1747586344814,
-            "url": "localhost:3001/posts/9",
+            "url": "{{ _.Host }}:{{ _.Port }}/posts/1",
             "name": "Eliminar Post",
             "description": "",
             "method": "DELETE",
@@ -872,9 +766,9 @@
         {
             "_id": "req_13a7178a18cd4b6db765875b1db5cc2f",
             "parentId": "fld_83b06d39101144168c00f36ccf1080ee",
-            "modified": 1747591846920,
+            "modified": 1750559303311,
             "created": 1747591734183,
-            "url": "localhost:3001/comments/",
+            "url": "{{ _.Host }}:{{ _.Port }}/comments/",
             "name": "Listar Comentarios",
             "description": "",
             "method": "GET",
@@ -901,7 +795,7 @@
         {
             "_id": "fld_83b06d39101144168c00f36ccf1080ee",
             "parentId": "wrk_bb0628e23de2415fbcca6172cf1f24a8",
-            "modified": 1747591734180,
+            "modified": 1750466144762,
             "created": 1747591734180,
             "name": "Comment",
             "description": "",
@@ -911,11 +805,40 @@
             "_type": "request_group"
         },
         {
+            "_id": "req_e753f28b9a6041bb99e0b89f0b50d6a0",
+            "parentId": "fld_83b06d39101144168c00f36ccf1080ee",
+            "modified": 1750559307889,
+            "created": 1750558349718,
+            "url": "{{ _.Host }}:{{ _.Port }}/comments/3",
+            "name": "Mostrar Comentario",
+            "description": "",
+            "method": "GET",
+            "body": {},
+            "parameters": [],
+            "headers": [
+                {
+                    "name": "User-Agent",
+                    "value": "insomnia/10.1.1"
+                }
+            ],
+            "authentication": {},
+            "metaSortKey": -1744104494027,
+            "isPrivate": false,
+            "pathParameters": [],
+            "settingStoreCookies": true,
+            "settingSendCookies": true,
+            "settingDisableRenderRequestBody": false,
+            "settingEncodeUrl": true,
+            "settingRebuildPath": true,
+            "settingFollowRedirects": "global",
+            "_type": "request"
+        },
+        {
             "_id": "req_825c0442fd8346ba90b86e6cafa0fd5e",
             "parentId": "fld_83b06d39101144168c00f36ccf1080ee",
-            "modified": 1747592106494,
+            "modified": 1750559311207,
             "created": 1747591734184,
-            "url": "localhost:3001/comments/",
+            "url": "{{ _.Host }}:{{ _.Port }}/comments/",
             "name": "Crear Comentario",
             "description": "",
             "method": "POST",
@@ -949,9 +872,9 @@
         {
             "_id": "req_7ec85275d15940edb8a74da127a1870a",
             "parentId": "fld_83b06d39101144168c00f36ccf1080ee",
-            "modified": 1747592151369,
+            "modified": 1750559314447,
             "created": 1747591734184,
-            "url": "localhost:3001/comments/8",
+            "url": "{{ _.Host }}:{{ _.Port }}/comments/8",
             "name": "Modificar Comentario",
             "description": "",
             "method": "PUT",
@@ -985,10 +908,10 @@
         {
             "_id": "req_5cfd94d7eb274adfb6a6c003d9ca0e81",
             "parentId": "fld_83b06d39101144168c00f36ccf1080ee",
-            "modified": 1747592171305,
+            "modified": 1750559318434,
             "created": 1747591734184,
-            "url": "localhost:3001/comments/9",
-            "name": "Eliminar Post",
+            "url": "{{ _.Host }}:{{ _.Port }}/comments/9",
+            "name": "Eliminar Comentario",
             "description": "",
             "method": "DELETE",
             "body": {
@@ -1036,9 +959,9 @@
         {
             "_id": "req_5f44a39b15604a21b114c11bc052da88",
             "parentId": "fld_abfc498a6f5b4cf6bac88e2c0894551b",
-            "modified": 1747611688054,
+            "modified": 1750559322770,
             "created": 1747592281201,
-            "url": "localhost:3001/archives/",
+            "url": "{{ _.Host }}:{{ _.Port }}/archives/",
             "name": "Listar Archivos",
             "description": "",
             "method": "GET",
@@ -1077,9 +1000,9 @@
         {
             "_id": "req_712583a5dac44171bf6577f57a4acc30",
             "parentId": "fld_abfc498a6f5b4cf6bac88e2c0894551b",
-            "modified": 1747611729094,
+            "modified": 1750559325897,
             "created": 1747592281203,
-            "url": "localhost:3001/archives/2",
+            "url": "{{ _.Host }}:{{ _.Port }}/archives/2",
             "name": "Subir Archivo",
             "description": "",
             "method": "POST",
@@ -1132,9 +1055,9 @@
         {
             "_id": "req_50131276292c4bd99174af171120ebfa",
             "parentId": "fld_abfc498a6f5b4cf6bac88e2c0894551b",
-            "modified": 1747611667132,
+            "modified": 1750559329020,
             "created": 1747592281203,
-            "url": "localhost:3001/archives/1",
+            "url": "{{ _.Host }}:{{ _.Port }}/archives/1",
             "name": "Modificar Archivo",
             "description": "",
             "method": "PUT",
@@ -1178,9 +1101,9 @@
         {
             "_id": "req_fff53a11eb624b2cb75ef87fcdf85528",
             "parentId": "fld_abfc498a6f5b4cf6bac88e2c0894551b",
-            "modified": 1747611764558,
+            "modified": 1750559333100,
             "created": 1747592281202,
-            "url": "localhost:3001/archives/5",
+            "url": "{{ _.Host }}:{{ _.Port }}/archives/5",
             "name": "Eliminar Archivo",
             "description": "",
             "method": "DELETE",
@@ -1229,11 +1152,19 @@
         {
             "_id": "env_29fd1a5735217a0492084cc026f4bbb9ad556872",
             "parentId": "wrk_bb0628e23de2415fbcca6172cf1f24a8",
-            "modified": 1747543564063,
+            "modified": 1750559150682,
             "created": 1747543564063,
             "name": "Base Environment",
-            "data": {},
-            "dataPropertyOrder": null,
+            "data": {
+                "Host": "localhost",
+                "Port": "3001"
+            },
+            "dataPropertyOrder": {
+                "&": [
+                    "Host",
+                    "Port"
+                ]
+            },
             "color": null,
             "isPrivate": false,
             "metaSortKey": 1747543564063,
