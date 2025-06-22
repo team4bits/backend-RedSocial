@@ -3,7 +3,7 @@ const {Comment, Post, User} = require('../models');
 const {redisClient} = require('../config/redisClient')
 
 //Importar controladores de cache
-const {deleteModelsCache, deleteModelByIdCache, getModelsCache, getModelByIdCache} = require('./genericController');
+const {deleteModelsCache, deleteModelByIdCache, getModelsCache, getModelByIdCache, deleteManyModelsCache} = require('./genericController');
 
 
 //Obtener todos los comentarios -> getComments
@@ -40,7 +40,7 @@ const getPostComments = async (req, res) => {
         Guardar los comentarios en la cache con la key: comments:<postId>
     */
     const postId = req.params.id;
-    const cacheKey = `comments:${postId}`
+    const cacheKey = `Comments:${postId}`
     try {
         const cached = await redisClient.get(cacheKey);
         if(cached){
@@ -69,10 +69,10 @@ const createComment = async (req, res) => {
         $push: { comments: comment._id }
     });
     //Guardar el comentario en la cache con la key: comment:<commentId>
-    await redisClient.set(`comment:${comment._id}`, JSON.stringify(comment), { EX: 300 });
+    await redisClient.set(`Comment:${comment._id}`, JSON.stringify(comment), { EX: 300 });
     //Eliminar los comentarios de la cache
     //Esto es necesario para que al crear un comentario, se actualicen los comentarios en la cache
-    deleteModelsCache(Comment);
+    await deleteManyModelsCache([Comment, Post, User]);
     res.status(201).json({
         message: 'Comentario creado',
         comment
@@ -86,8 +86,8 @@ const updateComment = async (req,res) => {
         req.body -> datos a actualizar
     */
     await Comment.findByIdAndUpdate(req.params.id, req.body, {new: true})
-    //Eliminar el comentario de la cache
-    deleteModelByIdCache(Comment, req.params.id);
+    //Eliminar el comentario de la cache, junto con sus padres asociados
+    await deleteManyModelsCache([Comment, Post, User]);
     //Retornar el comentario actualizado
     const updatedComment = await Comment.findById(req.params.id);
     res.status(200).json({
@@ -105,8 +105,19 @@ const deleteComment = async (req, res) => {
     const commentId = req.params.id;
     //El middelware verificó que el comenario existe
     const deletedComment = await Comment.findByIdAndDelete(commentId);
-    //Eliminar el comentario de la cache
-    deleteModelByIdCache(Comment, commentId);
+    //Eliminar el comentario de users.comments
+    await User.updateMany(
+        { comments: commentId },
+        { $pull: { comments: commentId } }
+    );
+    //Eliminar el comentario de posts.comments
+    await Post.updateMany(
+        { comments: commentId },
+        { $pull: { comments: commentId } }
+    );
+
+    //Eliminar el comentario de la cache, junto con sus padres asociados
+    await deleteManyModelsCache([Comment, Post, User]);
     //Retornar el comentario eliminado
     res.status(200).json({
         message: 'Comentario eliminado',
