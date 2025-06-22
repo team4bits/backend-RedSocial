@@ -5,12 +5,6 @@ const logRequest = (req, _, next) => {
     next();
 };
 
-const status500 = (res, error) => {
-    console.log(error)
-    return res
-        .status(500)
-        .json({ message: `Error interno del servidor` });
-}
 
 const existsModelById = (modelo) => {
     return async (req, res, next) => {
@@ -20,13 +14,11 @@ const existsModelById = (modelo) => {
             if (!cached) {
                 const data = await modelo.findById(id);
                 if (!data) {
-                    return res
-                        .status(404)
-                        .json({ message: `${modelo.modelName} con id ${id} no se encuentra registrado en la base de datos` });
+                    return errorPersonalizado(`${modelo.modelName} con id ${id} no se encuentra registrado en la base de datos` , 404, next);
                 }
             }
         } catch (error) {
-            return status500(res, error);
+            next(error);
         }
         next();
     };
@@ -37,12 +29,10 @@ const existsAnyByModel = (modelo) => {
         try {
             const data = await modelo.findOne();
             if (!data) {
-                return res
-                    .status(204)
-                    .json({ message: `No hay ningun ${modelo.name} registrado` });
+                return errorPersonalizado(`No hay ningun ${modelo.name} registrado`, 204, next);
             }
         } catch (error) {
-            return status500(res, error);
+            next(error);
         }
         next();
     }
@@ -71,4 +61,4 @@ const manejoDeErroresGlobales = ((err, req, res, next) => {
     res.status(500).json({ error: 'Error interno del servidor' });  //
 });
 
-module.exports = { logRequest, existsModelById, status500, existsAnyByModel, manejoDeErroresGlobales, errorPersonalizado };
+module.exports = { logRequest, existsModelById, existsAnyByModel, manejoDeErroresGlobales, errorPersonalizado };

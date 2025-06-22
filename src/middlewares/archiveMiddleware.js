@@ -4,31 +4,32 @@ const mongoose = require("mongoose");
 const { redisClient } = require("../config/redisClient");
 const multer = require('multer');
 const path = require('path');
+const { errorPersonalizado } = require('./genericMiddleware');
 
 const sinPostID = async (req, res, next) => {
   try {
     const postId = req.body.postId;
-    if (!postId) {return res.status(400).json({ message: 'Falta el campo postId en el body' })}
-    if (!mongoose.Types.ObjectId.isValid(postId)) {return res.status(400).json({ message: 'El postId tiene un formato inválido' })}   
+    if (!postId) {return errorPersonalizado('Falta el campo postId en el body',400,next)};
+    if (!mongoose.Types.ObjectId.isValid(postId)) {return errorPersonalizado('El ID del post es inválido',400,next)};    
     const cached = await redisClient.get(`Post:${postId}`);
     if (cached) {req.post = JSON.parse(cached);
       return next();
     }
     const post = await Post.findById(postId);
-    if (!post) {return res.status(400).json({ message: 'El post asociado no existe' })}
+    if (!post) {return errorPersonalizado('El post asociado no existe',404,next)};
     await redisClient.set(`Post:${postId}`, JSON.stringify(post), { EX: 300 });
     req.post = post; 
     next();
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: 'Error al buscar el post' });
+    next(error);
   }
 };
 
 const archiveById = async (req, res, next) => {
   const archiveId = req.params.id?.trim();
   if (!archiveId || !mongoose.Types.ObjectId.isValid(archiveId)) {    
-    return res.status(400).json({ error: 'El ID de la imagen es inválido' });
+    return errorPersonalizado('El ID de la imagen es inválido', 400, next);
   }
   try {
     const cached = await redisClient.get(`Archive:${archiveId}`);
@@ -38,13 +39,13 @@ const archiveById = async (req, res, next) => {
       return next();
     }
     const archive = await Archive.findById(archiveId);
-    if (!archive) {return res.status(404).json({ error: 'Imagen no encontrada' })}
+    if (!archive) {return errorPersonalizado('Imagen no encontrada', 404, next)};
     await redisClient.set(`Archive:${archiveId}`, JSON.stringify(archive), { EX: 300 });
     req.archive = archive;
     next();
   } catch (error) {
     //console.error("Error en archiveById:", error);
-    return res.status(500).json({ error: 'Error al buscar la imagen' });
+    next(error);
   }
 };
 
