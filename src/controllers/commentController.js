@@ -3,7 +3,7 @@ const {Comment, Post, User} = require('../models');
 const {redisClient} = require('../config/redisClient')
 
 //Importar controladores de cache
-const {deleteModelsCache, deleteModelByIdCache, getModelsCache, getModelByIdCache, deleteManyModelsCache} = require('./genericController');
+const {getModelsCache, getModelByIdCache, deleteManyModelsCache} = require('./genericController');
 
 
 //Obtener todos los comentarios -> getComments
@@ -32,31 +32,6 @@ const getCommentById = async (req, res) => {
     await redisClient.set(`Comment:${commentId}`, JSON.stringify(comment), { EX: 300 });
     res.status(200).json(comment);
 };
-//Obtener todos los comentarios de un post -> getPostComments No probado
-const getPostComments = async (req, res) => {
-    /*
-        Obtener todos los comentarios de un post
-        req.params.id -> id del post
-        Guardar los comentarios en la cache con la key: comments:<postId>
-    */
-    const postId = req.params.id;
-    const cacheKey = `Comments:${postId}`
-    try {
-        const cached = await redisClient.get(cacheKey);
-        if(cached){
-            //Retornar los comentarios guardados en la cache
-            return res.status(200).json(JSON.parse(cached));
-        }
-        //Obtener ls comentarios guardados en la db
-        const comments = await Post.find({post: postId});
-        //Guardar los comentarios en la cache
-        await redisClient.set(cacheKey, JSON.stringify(comments), {EX: 300});
-        //Retornar los comentarios
-        res.status(200).json(comments);
-    } catch (error) {
-        res.status(500).json({error: error.message})
-    }
-}
 //Crear un nuevo comentario con body-> createComment
 const createComment = async (req, res) => {
     const comment = await Comment.create(req.body);//Crear el comentario
@@ -128,7 +103,6 @@ const deleteComment = async (req, res) => {
 
 module.exports ={
     getComments,
-    getPostComments,
     getCommentById,
     createComment,
     updateComment,

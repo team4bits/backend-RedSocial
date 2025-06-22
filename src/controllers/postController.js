@@ -44,6 +44,8 @@ const deletePostById = async (req, res) => {
     await Post.findByIdAndDelete(postId);
     await deleteModelByIdCache(Post, postId);
     await deleteManyModelsCache([User, Post])//Borro cache de modelo actual y de padre
+    //Borrar el post del usuario que lo creó
+    await User.findOneAndUpdate({ posts: postId }, { $pull: { posts: postId } })
     res.status(200).json({ message: "Post eliminado correctamente" });
 };
 
