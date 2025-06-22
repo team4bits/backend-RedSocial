@@ -1,6 +1,6 @@
 const { Post, Comment, Archive, Tag, User } = require("../models");
 const { redisClient } = require('../config/redisClient')
-const { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache, deleteManyModelsCache } = require("./genericController")
+const { getModelByIdCache, getModelsCache, deleteModelByIdCache, deleteManyModelsCache } = require("./genericController")
 
 const getPosts = async (_, res) => {
     const cached = await getModelsCache(Post)

@@ -3,7 +3,7 @@ const {Comment, Post, User} = require('../models');
 const {redisClient} = require('../config/redisClient')
 
 //Importar controladores de cache
-const {getModelsCache, getModelByIdCache, deleteManyModelsCache} = require('./genericController');
+const {getModelsCache, getModelByIdCache, deleteManyModelsCache, deleteManyDB} = require('./genericController');
 
 
 //Obtener todos los comentarios -> getComments
@@ -80,16 +80,8 @@ const deleteComment = async (req, res) => {
     const commentId = req.params.id;
     //El middelware verificó que el comenario existe
     const deletedComment = await Comment.findByIdAndDelete(commentId);
-    //Eliminar el comentario de users.comments
-    await User.updateMany(
-        { comments: commentId },
-        { $pull: { comments: commentId } }
-    );
-    //Eliminar el comentario de posts.comments
-    await Post.updateMany(
-        { comments: commentId },
-        { $pull: { comments: commentId } }
-    );
+    //Eliminar comentario de modelos
+    await deleteManyDB([User, Post], { comments: commentId });
 
     //Eliminar el comentario de la cache, junto con sus padres asociados
     await deleteManyModelsCache([Comment, Post, User]);
