@@ -1,6 +1,6 @@
 const { User, Post, Comment } = require("../models");
 const { redisClient }  = require('../config/redisClient')
-const { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache } = require("./genericController")
+const { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache, deleteManyModelsCache } = require("./genericController")
 
 const getUsers = async (_, res) => {
     const cached = await getModelsCache(User)
@@ -11,9 +11,9 @@ const getUsers = async (_, res) => {
 
 const getUserById = async (req, res) => {
     const cached = await getModelByIdCache(User, req.params.id)
-    const user = cached ? JSON.parse(cached) : await User.findById(req.params.id).populate({ path: 'posts', select: 'fecha content comments tags imagenes'}).populate({ path: 'comments', select: 'fecha content'});
+    const user = cached ? JSON.parse(cached) : await User.findById(req.params.id).populate('posts').populate('comments');
     await redisClient.set(`User:${req.params.id}`, JSON.stringify(user), { EX: 300 })
-    res.status(200).json({user, message: `Usuario obtenido de ${cached ? 'caché' : 'base de datos'}`});
+    res.status(200).json(user);
 };
 
 const createUser = async (req, res) => {
@@ -35,7 +35,7 @@ const deleteById = async (req, res) => {
     await Comment.deleteMany({ userId: userId });
     await User.findByIdAndDelete(userId);
     await deleteModelByIdCache(User, userId);
-    await deleteModelsCache(User);
+    await deleteManyModelsCache([User, Post, Comment]) // Borro cache de modelo actual y de padre
     res.status(200).json({ message: "Usuario eliminado correctamente" });
 };
 
