@@ -25,7 +25,11 @@ const postSchema = new mongoose.Schema(
         comments: [{
                 type: Schema.Types.ObjectId,
                 ref: 'Comment'
-            }]
+            }],
+        tags:[{
+            type: Schema.Types.ObjectId,
+            ref: 'Tag'
+        }]
     },
     {
         collection: "posts",
@@ -35,7 +39,7 @@ const postSchema = new mongoose.Schema(
 postSchema.set("toJSON", {
     transform: (_, ret) => {
         delete ret.__v;
-        delete ret._id;
+        //delete ret._id;
     },
 });
 
