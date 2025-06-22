@@ -61,4 +61,21 @@ const manejoDeErroresGlobales = ((err, req, res, next) => {
     res.status(500).json({ error: 'Error interno del servidor' });  //
 });
 
-module.exports = { logRequest, existsModelById, existsAnyByModel, manejoDeErroresGlobales, errorPersonalizado };
+const validarCamposExactos = (modelo) => {
+    return ( req, res, next ) => {
+    const camposValidos = Object.keys(modelo.schema.paths);
+    const camposRecibidos = Object.keys(req.body);
+    const camposInvalidos = camposRecibidos.filter(campo => !camposValidos.includes(campo));
+
+    if (camposInvalidos.length > 0) {
+        return errorPersonalizado(`hay campos inválidos`, 400, next);
+    }
+    next()
+    }
+}
+
+
+
+
+
+module.exports = { logRequest, existsModelById, existsAnyByModel, manejoDeErroresGlobales, errorPersonalizado, validarCamposExactos };

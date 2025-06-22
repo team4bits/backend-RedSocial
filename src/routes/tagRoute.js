@@ -24,6 +24,8 @@ router.get('/:id',
 
 router.post('/',
   tagMiddleware.notExistsTag,
+  tagMiddleware.postDoesntExists,
+  genericMiddleware.validarCamposExactos(Tag),
   /* 
     #swagger.tags = ['Tags']
     #swagger.path = '/tags'
