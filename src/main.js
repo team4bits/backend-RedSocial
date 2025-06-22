@@ -18,7 +18,7 @@ const cors = require('cors');
 // Middleware
 app.use(express.json())
 app.use(genericMiddleware.logRequest); // se utiliza para corroborar las peticiones (url, metodo y que se envia)
-//app.use('/uploads', express.static(path.join(__dirname, 'uploads'))) 
+app.use('/uploads', express.static(path.join(__dirname, 'uploads'))) 
 // deja la carpeta uploads como estatica (permite guardar y acceder via localhost)
 
 // Rutas

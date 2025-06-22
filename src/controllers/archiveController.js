@@ -7,7 +7,7 @@ const { redisClient } = require('../config/redisClient');
 const getArchives = async (req, res) => {
   const cached = await getModelsCache(Archive);
   const archives = cached ? JSON.parse(cached) : await Archive.find();
-  await redisClient.set('archives:todos', JSON.stringify(archives), { EX: 300 });
+  await redisClient.set('Archives:todos', JSON.stringify(archives), { EX: 300 });
   res.status(200).json(archives);
 };
 
