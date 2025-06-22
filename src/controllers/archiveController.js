@@ -1,7 +1,7 @@
 const Archive = require("../models/archive");
 const Post = require("../models/post");
 const { getModelsCache } = require("./genericController");
-const { redisClient }  = require('../config/redisClient');
+const { redisClient } = require('../config/redisClient');
 const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
@@ -9,7 +9,7 @@ const fs = require('fs');
 const getArchives = async (req, res) => {
   const cached = await getModelsCache(Archive);
   const archives = cached ? JSON.parse(cached) : await Archive.find();
-  await redisClient.set('archives:todos', JSON.stringify(archives), { EX: 300 });
+  await redisClient.set('Archives:todos', JSON.stringify(archives), { EX: 300 });
   res.status(200).json(archives);
 };
 
@@ -95,3 +95,24 @@ const deleteById = async (req, res) => {
 };
 
 module.exports = { getArchives, createArchives, updateArchive, deleteById };
+
+/*
+// Crear un solo archivo (con imagen pasada por body, no multer)
+const createArchive = async (req, res) => {
+try {
+ const postId = req.params.id;
+ const { imagen } = req.body;
+
+ const newArchive = await Archive.create({
+   imagen,
+   postId,
+ });
+ //REDIS - ELIMINAR CACHE
+ await redisClient.del('archives_all');
+
+ res.status(201).json(newArchive);
+} catch (e) {
+ res.status(400).json({ error: e.message });
+}
+};
+*/

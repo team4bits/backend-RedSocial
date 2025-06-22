@@ -28,7 +28,7 @@ const commentSchema = new mongoose.Schema(
 commentSchema.set("toJson", {
     transform: (_, ret) => {
         delete ret.__v; // Eliminar el campo __v
-        delete ret._id; // Eliminar el campo _id
+        //delete ret._id; // Eliminar el campo _id
     }
 });
 const Comment = mongoose.model("Comment", commentSchema);

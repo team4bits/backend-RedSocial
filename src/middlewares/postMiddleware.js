@@ -1,5 +1,6 @@
-const { Post, User } = require('../models');
+const { Post, User, Tag, Archive } = require('../models');
 const { errorPersonalizado } = require('./genericMiddleware');
+const { getModelByIdCache } = require('../controllers/genericController');
 
 const existUserRequest = async (req, res, next) => {
     try {
@@ -27,52 +28,41 @@ const userDoesntChange = (req, res, next) => {
     next();
 }
 
-// const validarImagenAsociadaAPost = async (req,res,next) => {
-//     try{
-//         const {id,idImage} = req.params;
-//         const imagen = await Archive.findOne({where:{
-//                                                     "id":idImage,
-//                                                     "postId":id}});
-//         if (!imagen) {
-//             return res.status(404).send(`Error: No se encuentra asociado el archivo con id ${idImage}, al post con id ${id}.`)
-//         }
-//         next();
-//     }catch(err){
-//         return status500(res,error);
-//     }
-// }
+const validarImagenAsociadaAPost = async (req, res, next) => {
+    try {
+        const { id, postId } = req.params;
+        const imagen = await Archive.findOne({
+            _id: id,
+            postId: postId
+        });
+        if (!imagen) {
+            console.log("imagen", imagen);
+            return errorPersonalizado(`No se encuentra asociado el archivo con id ${id}, al post con id ${postId}.`, 404, next);
+        }
+        next();
+    } catch (err) {
+        next(err);
+    }
+}
 
-// const existsModelImageById = async (req, res, next) => {
-//         try{
-//             const id = req.params.idImage;
-//             const data = await Archive.findByPk(id);
-//             if (!data) {
-//                 return res
-//                     .status(404)
-//                     .json({ message: `Archivo con id ${id} no se encuentra registrado` });
-//             }
-//         }
-//         catch (error) {
-//             return status500(res,error);
-//         }
-//         next();
-//     };
+const existsPostYTagPorId = async (req, res, next) => {
+        try{
+            const {postId, tagId} = req.params;
 
-// const existsPostYTagPorId = async (req, res, next) => {
-//         try{
-//             const {postId, tagId} = req.params;
-//             const postToUpdate = await Post.findByPk(postId);
-//             const tagToUpdate = await Tag.findByPk(tagId);
-//             if (!postToUpdate || !tagToUpdate) {
-//             let modelo = !postToUpdate ? "Post" : "Tag";
-//             return res.status(404).json({ error: `${modelo} no encontrado` });
-//             }
-//         } catch (error) {
-//             return status500(res,error);
-//         }
-//         next();
-//     };
+            const postCached = await getModelByIdCache(Post, postId);
+            const postToUpdate = postCached ? JSON.parse(postCached) : await Post.findById(postId);
 
+            const tagCached = await getModelByIdCache(Tag, tagId);
+            const tagToUpdate = tagCached ? JSON.parse(tagCached) : await Tag.findById(tagId);
 
+            if (!postToUpdate || !tagToUpdate) {
+                let modelo = !postToUpdate ? "Post" : "Tag";
+                return errorPersonalizado(`${modelo} no encontrado` , 404, next);
+            }
+            next();
+         } catch (error) {
+            next(error);
+        }
+    };
 
-module.exports = { existUserRequest, userDoesntChange };
+module.exports = { existUserRequest, userDoesntChange, existsPostYTagPorId, validarImagenAsociadaAPost };

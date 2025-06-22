@@ -1,11 +1,15 @@
 const { redisClient } = require('../config/redisClient');
 
 const getModelByIdCache = async (modelo, id) => {
-    return await redisClient.get(`${modelo.modelName}:${id}`);
+    const isCached = await redisClient.get(`${modelo.modelName}:${id}`);
+    console.log(`Usuario obtenido por ${isCached ? 'cache' : 'base de datos'} `);
+    return isCached;
 };
 
 const getModelsCache = async (modelo) => {
-    return await redisClient.get(`${modelo.modelName}s:todos`); 
+    const isCached = await redisClient.get(`${modelo.modelName}s:todos`);
+    console.log(`Usuario obtenido por ${isCached ? 'cache' : 'base de datos'} `);
+    return isCached; 
 };
 
 const deleteModelByIdCache = async (modelo, id) => {
