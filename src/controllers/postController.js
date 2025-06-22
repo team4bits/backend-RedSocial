@@ -1,6 +1,6 @@
 const { Post, Comment, Archive, Tag, User } = require("../models");
 const { redisClient } = require('../config/redisClient')
-const { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache } = require("./genericController")
+const { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache, deleteManyModelsCache } = require("./genericController")
 
 const getPosts = async (_, res) => {
     const cached = await getModelsCache(Post)
@@ -20,14 +20,19 @@ const createPost = async (req, res) => {
     const post = await Post.create(req.body);
     const { userId } = req.body;
     await User.findByIdAndUpdate(userId, { $push: { posts: post._id } }, { new: true }); // Agrega el post al usuario
+    /*
+    await deleteModelsCache(User) // Elimina el cache de todos los usuarios, ya que se ha creado un nuevo post y el cache está desactualizado
     await deleteModelsCache(Post) // Elimina el cache de todos los posts, ya que se ha creado uno nuevo por ende el cache esta desactualizado
+    */
+    await deleteManyModelsCache([User, Post]) // Elimina el cache del usuario que creó el post
     res.status(201).json(post);
 };
 
 const updatePostById = async (req, res) => {
     await Post.findByIdAndUpdate(req.params.id, req.body, { new: true })
     await deleteModelByIdCache(Post, req.params.id)
-    await deleteModelsCache(Post) // Borro ambos caches, el de un post en particular y el de todos los posts para garantizar que la información sea borrada
+    //await deleteModelsCache(Post) // Borro ambos caches, el de un post en particular y el de todos los posts para garantizar que la información sea borrada
+    await deleteManyModelsCache([User, Post])//Borro cache de modelo actual y de padre
     res.status(200).json({ message: "Post actualizado correctamente" });
 };
 
@@ -38,7 +43,7 @@ const deletePostById = async (req, res) => {
     await Tag.deleteMany({ postId: postId });
     await Post.findByIdAndDelete(postId);
     await deleteModelByIdCache(Post, postId);
-    await deleteModelsCache(Post); // Lo mismo que en update
+    await deleteManyModelsCache([User, Post])//Borro cache de modelo actual y de padre
     res.status(200).json({ message: "Post eliminado correctamente" });
 };
 
@@ -52,7 +57,7 @@ const actualizarTag = (metodo) => {
                 await Tag.findByIdAndUpdate(req.params.tagId, { $pull: { posts: req.params.postId } }, { new: true });
             }
             await deleteModelByIdCache(Post, req.params.id) 
-            await deleteModelsCache(Post)
+            await deleteManyModelsCache([User, Post])//Borro cache de modelo actual y de padre
             res.status(200).json({ message: `Tag ${metodo == "agregar" ? "agregado" : "eliminado"} correctamente` });
         
     }
