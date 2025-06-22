@@ -1,0 +1,887 @@
+type: collection.insomnia.rest/5.0
+name: Red Social
+meta:
+  id: wrk_67b0742968114e74b81283a2394d8ce1
+  created: 1750611477882
+  modified: 1750611477882
+  description: ""
+collection:
+  - name: User
+    meta:
+      id: fld_66c0de9c6acd46d69e62a3e6f4eedbe6
+      created: 1747543584496
+      modified: 1747543668304
+      sortKey: -1747543584496
+      description: ""
+    children:
+      - url: "{{ _.Host }}:{{ _.Port }}/users"
+        name: Listar Usuarios
+        meta:
+          id: req_62e739bb36ed405d9369ef960e3d74b1
+          created: 1747543589375
+          modified: 1750559178556
+          isPrivate: false
+          description: ""
+          sortKey: -1747543589375
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.1.1
+        authentication:
+          type: none
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/users/6854ae2c5de7b5dffeb2c01c"
+        name: Mostrar Usuario
+        meta:
+          id: req_3900748145fe48c7b01f6822acd2930b
+          created: 1747543694482
+          modified: 1750559211922
+          isPrivate: false
+          description: ""
+          sortKey: -1740665398679
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/users"
+        name: Crear Usuario
+        meta:
+          id: req_31045bc4e93142509a32e6cc7390ef14
+          created: 1747543721459
+          modified: 1750559219356
+          isPrivate: false
+          description: ""
+          sortKey: -1737226303331
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nickName": "cualquiera 2",
+              "email": "cualquiera2@loquesea.com"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/users/6855fc331a419fa6432c6b1a"
+        name: Modificar Usuario
+        meta:
+          id: req_6e7587d7bf0d4fb7965f0278f6ffc749
+          created: 1747543919952
+          modified: 1750559222908
+          isPrivate: false
+          description: ""
+          sortKey: -1734217094901.5
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"nickName": "nuevoNick",
+            	"email": "nuevoemail@nuevoemail.com"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/users/6855fc331a419fa6432c6b1a"
+        name: Eliminar Usuario
+        meta:
+          id: req_48ce0f7a4c604d5a9ce1bcf93f569c9b
+          created: 1747543983635
+          modified: 1750559227960
+          isPrivate: false
+          description: ""
+          sortKey: -1734002151442.25
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: ""
+        parameters:
+          - id: pair_07c65043643548959beb2cbe27b5f35b
+            name: id
+            value: "5"
+            description: ""
+            disabled: true
+          - id: pair_6dad0256c2b746afafff6eec393de51e
+            name: ""
+            value: ""
+            description: ""
+            disabled: false
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Tag
+    meta:
+      id: fld_f092df850ebf47c298eb88e96ca72073
+      created: 1747545047540
+      modified: 1750380107001
+      sortKey: -1740663027831.5
+      description: ""
+    children:
+      - url: "{{ _.Host }}:{{ _.Port }}/tags/"
+        name: Listar Tags
+        meta:
+          id: req_f65f3734fa3a4770b10f27ba645574e9
+          created: 1747545047541
+          modified: 1750559243215
+          isPrivate: false
+          description: ""
+          sortKey: -1747543589375
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/tags/"
+        name: Crear Tag
+        meta:
+          id: req_09541d3fffe442c391e8ee8829de517f
+          created: 1747545047542
+          modified: 1750559253182
+          isPrivate: false
+          description: ""
+          sortKey: -1737226303331
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"tag": "nuevoTag 3"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/tags/6855fc8a1a419fa6432c6b2f"
+        name: Mostrar Tag
+        meta:
+          id: req_12ef6b0aa3a448cf900e3430311ba408
+          created: 1747545047542
+          modified: 1750559248799
+          isPrivate: false
+          description: ""
+          sortKey: -1740665398679
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/tags/6855fc8a1a419fa6432c6b2f"
+        name: Modificar Tag
+        meta:
+          id: req_ecff8a7817844653a6bdda2deaf770b1
+          created: 1747545047542
+          modified: 1750559256892
+          isPrivate: false
+          description: ""
+          sortKey: -1735506755657
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"tag": "otro tag"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/tags/6855fd6c076bc9995337449a"
+        name: Eliminar Tag
+        meta:
+          id: req_6db6a6acaa414e77ab04e38a3483dfba
+          created: 1747545047544
+          modified: 1750559260593
+          isPrivate: false
+          description: ""
+          sortKey: -1734002151442.25
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: ""
+        parameters:
+          - id: pair_07c65043643548959beb2cbe27b5f35b
+            name: id
+            value: "5"
+            description: ""
+            disabled: true
+          - id: pair_6dad0256c2b746afafff6eec393de51e
+            name: ""
+            value: ""
+            description: ""
+            disabled: false
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Post
+    meta:
+      id: fld_b7432f549e464ce488ac6d5226d29b2c
+      created: 1747586344810
+      modified: 1747588420240
+      sortKey: -1737222749499.25
+      description: ""
+    children:
+      - name: PostTag
+        meta:
+          id: fld_224e0138483a498b998557f2837ed217
+          created: 1747588441217
+          modified: 1747591574085
+          sortKey: -1747588441217
+          description: ""
+        children:
+          - url: "{{ _.Host }}:{{ _.Port }}/posts/1/tags/1"
+            name: Asignar Tag al Post
+            meta:
+              id: req_c018041d44834f45bc33df1826a4a662
+              created: 1747588477237
+              modified: 1750559265445
+              isPrivate: false
+              description: ""
+              sortKey: -1747588450036
+            method: POST
+            body:
+              mimeType: application/json
+              text: |-
+                {
+
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/10.1.1
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.Host }}:{{ _.Port }}/posts/1/tags/1"
+            name: Eliminar Tag del Post
+            meta:
+              id: req_1b9e4eed32374f6da7f83abcd4286f12
+              created: 1747588574878
+              modified: 1750559268666
+              isPrivate: false
+              description: ""
+              sortKey: -1747588449986
+            method: DELETE
+            body:
+              mimeType: application/json
+              text: |-
+                {
+
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/10.1.1
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - name: Archive
+        meta:
+          id: fld_e7f2608c82de4b80a459c11be6de2989
+          created: 1747591614059
+          modified: 1747591614059
+          sortKey: -1747566012856.5
+          description: ""
+        children:
+          - url: "{{ _.Host }}:{{ _.Port }}/posts/1/tags/1"
+            name: Agregar Imagen al Post
+            meta:
+              id: req_2c26e9221c5b4ca3b1831ea838fc383a
+              created: 1747591614064
+              modified: 1750559272512
+              isPrivate: false
+              description: ""
+              sortKey: -1747588450036
+            method: PUT
+            body:
+              mimeType: application/json
+              text: |-
+                {
+
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/10.1.1
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+          - url: "{{ _.Host }}:{{ _.Port }}/posts/1/tags/1"
+            name: Eliminar Imagen del Post
+            meta:
+              id: req_76a2dd43cd544b13a55dbc3683a4e9f2
+              created: 1747591614067
+              modified: 1750559276497
+              isPrivate: false
+              description: ""
+              sortKey: -1747588449986
+            method: DELETE
+            body:
+              mimeType: application/json
+              text: |-
+                {
+
+                }
+            headers:
+              - name: Content-Type
+                value: application/json
+              - name: User-Agent
+                value: insomnia/10.1.1
+            settings:
+              renderRequestBody: true
+              encodeUrl: true
+              followRedirects: global
+              cookies:
+                send: true
+                store: true
+              rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/posts/"
+        name: Listar Posts
+        meta:
+          id: req_579cedaf41a34d5791bc5f044f07ff47
+          created: 1747586344811
+          modified: 1750559283454
+          isPrivate: false
+          description: ""
+          sortKey: -1747543589375
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/posts/6855fe99689b9a8cb97eabc1"
+        name: Mostrar Post
+        meta:
+          id: req_575a16e38da645e68cb98a7a003bcebc
+          created: 1747586344812
+          modified: 1750559287237
+          isPrivate: false
+          description: ""
+          sortKey: -1740665398679
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/posts/6"
+        name: Modificar Post
+        meta:
+          id: req_af5d1072068243a8b1fc049e63366bc1
+          created: 1747586344813
+          modified: 1750559295064
+          isPrivate: false
+          description: ""
+          sortKey: -1735506755657
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"content": "este es un nuevo post modificado"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/posts/1"
+        name: Eliminar Post
+        meta:
+          id: req_ac02c507d34d429b9a6b1502f6df265a
+          created: 1747586344814
+          modified: 1750559299246
+          isPrivate: false
+          description: ""
+          sortKey: -1734002151442.25
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: ""
+        parameters:
+          - id: pair_07c65043643548959beb2cbe27b5f35b
+            name: id
+            value: "5"
+            description: ""
+            disabled: true
+          - id: pair_6dad0256c2b746afafff6eec393de51e
+            name: ""
+            value: ""
+            description: ""
+            disabled: false
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/posts/"
+        name: Crear Post
+        meta:
+          id: req_9552ca0a5150407597448204cb79f604
+          created: 1747586836621
+          modified: 1750559291917
+          isPrivate: false
+          description: ""
+          sortKey: -1736366529494
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"userId": "6854ae2c5de7b5dffeb2c01c", 
+            	"content": "este es otro nuevo post"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Comment
+    meta:
+      id: fld_457dd48ef8194bc98d0c17600d5aa0b0
+      created: 1747591734180
+      modified: 1750466144762
+      sortKey: -1735502610333.125
+      description: ""
+    children:
+      - url: "{{ _.Host }}:{{ _.Port }}/comments/"
+        name: Listar Comentarios
+        meta:
+          id: req_b75657ff2f9f40ad976cbacfbb5b7593
+          created: 1747591734183
+          modified: 1750559303311
+          isPrivate: false
+          description: ""
+          sortKey: -1747543589375
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/comments/8"
+        name: Modificar Comentario
+        meta:
+          id: req_14e3f58c18494c468be7717408cc6339
+          created: 1747591734184
+          modified: 1750559314447
+          isPrivate: false
+          description: ""
+          sortKey: -1735506755657
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"coment": "este es un comentario modificado"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/comments/9"
+        name: Eliminar Comentario
+        meta:
+          id: req_3a7ff89dd73c4567afc7fed2a0f18014
+          created: 1747591734184
+          modified: 1750559318434
+          isPrivate: false
+          description: ""
+          sortKey: -1734002151442.25
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: ""
+        parameters:
+          - id: pair_07c65043643548959beb2cbe27b5f35b
+            name: id
+            value: "5"
+            description: ""
+            disabled: true
+          - id: pair_6dad0256c2b746afafff6eec393de51e
+            name: ""
+            value: ""
+            description: ""
+            disabled: false
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/comments/"
+        name: Crear Comentario
+        meta:
+          id: req_c98c8b975ae54897b81177f495920217
+          created: 1747591734184
+          modified: 1750559311207
+          isPrivate: false
+          description: ""
+          sortKey: -1737226303331
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"userId": "1", 
+            	"postId": "2",
+            	"coment": "este es un nuevo comentario"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/comments/3"
+        name: Mostrar Comentario
+        meta:
+          id: req_4c4ab3f1de644eb99671ca455e3962ae
+          created: 1750558349718
+          modified: 1750559307889
+          isPrivate: false
+          description: ""
+          sortKey: -1744104494027
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Archive
+    meta:
+      id: fld_4221f7a0dec4425f8257feda1a065a11
+      created: 1747592281201
+      modified: 1747592281201
+      sortKey: -1734642540750.0625
+      description: ""
+    children:
+      - url: "{{ _.Host }}:{{ _.Port }}/archives/"
+        name: Listar Archivos
+        meta:
+          id: req_7b3d97665f3e4da0af1cbda88d75d856
+          created: 1747592281201
+          modified: 1750559322770
+          isPrivate: false
+          description: ""
+          sortKey: -1747543589375
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/archives/6858417682a78fb435909038"
+        name: Eliminar Archivo
+        meta:
+          id: req_6a4776b69ec34adeb491a00f98241cfd
+          created: 1747592281202
+          modified: 1750614405866
+          isPrivate: false
+          description: ""
+          sortKey: -1734002151442.25
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: ""
+        parameters:
+          - id: pair_07c65043643548959beb2cbe27b5f35b
+            name: id
+            value: "5"
+            description: ""
+            disabled: true
+          - id: pair_6dad0256c2b746afafff6eec393de51e
+            name: ""
+            value: ""
+            description: ""
+            disabled: false
+        headers:
+          - name: Content-Type
+            value: application/json
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/archives/"
+        name: Subir Archivo
+        meta:
+          id: req_3cf65dc5ba994892839fbf9c7a4394dd
+          created: 1747592281203
+          modified: 1750614382485
+          isPrivate: false
+          description: ""
+          sortKey: -1737226303331
+        method: POST
+        body:
+          mimeType: multipart/form-data
+          params:
+            - id: pair_6941e86ec0b4434ab87def82c7ec96c6
+              name: postId
+              value: 685335b4d2bd2df8c769e1e7
+              description: ""
+              disabled: false
+            - id: pair_cb83ecce090a421686d920634c953b91
+              name: imagenes
+              value: ""
+              description: ""
+              disabled: false
+              type: file
+              fileName: C:\Repositorios\UNAHUR\Estrategia de
+                persistencia\anti-social-mongo-4-bits\uploads\ejemplo.jpg
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.Host }}:{{ _.Port }}/archives/6858417682a78fb435909038"
+        name: Modificar Archivo
+        meta:
+          id: req_9a2dc9d2eaf54180aa7f3f1ac153c1ac
+          created: 1747592281203
+          modified: 1750614415493
+          isPrivate: false
+          description: ""
+          sortKey: -1735506755657
+        method: PUT
+        body:
+          mimeType: multipart/form-data
+          params:
+            - id: pair_9a3f4b7a4cab42e390641b5949b2145e
+              name: imagenes
+              value: ""
+              description: ""
+              disabled: false
+              type: file
+              fileName: C:\Repositorios\UNAHUR\Estrategia de
+                persistencia\anti-social-mongo-4-bits\uploads\imagenes-1750543630426-199100930.jpeg
+            - id: pair_5114b1eb1ae7400b8f1e7b303e845b66
+              name: postId
+              value: "123"
+              description: ""
+              disabled: false
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+          - name: User-Agent
+            value: insomnia/10.1.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_41951bda46784d52a37467aad7856453
+    created: 1747543564064
+    modified: 1747543564064
+environments:
+  name: Base Environment
+  meta:
+    id: env_2c4863578bfd4fec97325461025b31d0
+    created: 1747543564063
+    modified: 1750559150682
+    isPrivate: false
+  data:
+    Host: localhost
+    Port: "3001"
