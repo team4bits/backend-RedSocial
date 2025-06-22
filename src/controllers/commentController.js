@@ -12,7 +12,7 @@ const getComments = async (_,res) => {
     const cached = await getModelsCache(Comment);
     const comments = cached ? JSON.parse(cached) : await Comment.find();
     //Guardar los comentarios en la cache con la key: comments:todos
-    await redisClient.set('comments:todos', JSON.stringify(comments), {EX: 300});
+    await redisClient.set('Comments:todos', JSON.stringify(comments), {EX: 300});
     //Retornar los comentarios
     res.status(200).json(comments);
     
@@ -29,7 +29,7 @@ const getCommentById = async (req, res) => {
     //Si está cacheado, lo asigna a comment, sinó lo busca en la base de datos
     const comment = cached ? JSON.parse(cached) : await Comment.findById(commentId);
     //Guardar el comentario en la cache con la key: comment:commentId
-    await redisClient.set(`comment:${commentId}`, JSON.stringify(comment), { EX: 300 });
+    await redisClient.set(`Comment:${commentId}`, JSON.stringify(comment), { EX: 300 });
     res.status(200).json(comment);
 };
 //Obtener todos los comentarios de un post -> getPostComments No probado

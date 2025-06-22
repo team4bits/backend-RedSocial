@@ -5,14 +5,14 @@ const { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCac
 const getTags = async (_, res) => {
     const cached = await getModelsCache(Tag)
     const tags = cached ? JSON.parse(cached) : await Tag.find().populate({ path: 'posts', select: 'fecha content userId' });
-    await redisClient.set('tags:todos', JSON.stringify(tags), { EX: 300 })
+    await redisClient.set('Tags:todos', JSON.stringify(tags), { EX: 300 })
     res.status(200).json(tags);
 };
 
 const getTagById = async (req, res) => {
     const cached = await getModelByIdCache(Tag, req.params.id)
     const tag = cached ? JSON.parse(cached) : await Tag.findById(req.params.id).populate({ path: 'posts', select: 'fecha content userId' });
-    await redisClient.set(`tag:${req.params.id}`, JSON.stringify(tag), { EX: 300 })
+    await redisClient.set(`Tag:${req.params.id}`, JSON.stringify(tag), { EX: 300 })
     res.status(200).json(tag);
 };
 
