@@ -2,6 +2,7 @@ const Archive = require("../models/archive");
 const Post = require("../models/post");
 const { getModelsCache } = require("./genericController");
 const { redisClient } = require('../config/redisClient');
+const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
 
@@ -25,11 +26,12 @@ const createArchives = async (req, res) => {
         })
       )
     );
-
-    // Agrega las referencias de los archivos al post
-    const archiveIds = nuevasEntradas.map(entry => entry._id);
-    await Post.findByIdAndUpdate(postId, { $push: { imagenes: { $each: archiveIds } } });
-
+    const archivosIds = nuevasEntradas.map(archivo => archivo._id);
+    await Post.findByIdAndUpdate(
+      postId,
+      { $push: { imagenes: { $each: archivosIds } } },
+      { new: true }
+    );
     await redisClient.sendCommand(['DEL', 'archives:todos']);
     res.status(201).json(nuevasEntradas);
   } catch (error) {
@@ -70,12 +72,18 @@ const deleteById = async (req, res) => {
       console.log("Imagen física eliminada:", rutaFisica);
       //BUCHE
       const usuarioQueElimina = req.user?.email || req.user?.username || 'desconocido';
-      console.log(`🗑 Imagen eliminada por: ${usuarioQueElimina}`);
+      console.log(`Imagen eliminada por: ${usuarioQueElimina}`);
       //
     } else {
       console.log("Imagen física no encontrada:", rutaFisica);
     }
     await archive.deleteOne();
+    if (archive.postId) {
+      await Post.findByIdAndUpdate(
+        archive.postId,
+        { $pull: { imagenes: new mongoose.Types.ObjectId(archive._id) } }
+      );
+    }
     await Promise.all([
       redisClient.del('archives:todos'),
       redisClient.del(`Archive:${archiveId}`)
