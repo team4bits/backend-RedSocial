@@ -11,7 +11,7 @@ const getTags = async (_, res) => {
 
 const getTagById = async (req, res) => {
     const cached = await getModelByIdCache(Tag, req.params.id)
-    const tag = cached ? JSON.parse(cached) : await Tag.findById(req.params.id).populate({ path: 'posts', select: 'fecha content userId' });
+    const tag = cached ? JSON.parse(cached) : await Tag.findById(req.params.id).populate('posts');
     await redisClient.set(`Tag:${req.params.id}`, JSON.stringify(tag), { EX: 300 })
     res.status(200).json(tag);
 };

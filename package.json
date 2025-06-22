@@ -6,11 +6,10 @@
   "scripts": {
     "start": "node src/main.js",
     "docs": "rm -f swaggerDoc.json swagger.yaml && node swagger.js",
-    "db": "node src/reiniciarDB.js && npx sequelize-cli db:seed:all",
     "dev": "nodemon src/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Gerardo Gonzalez Tulian",
+  "author": "4 bits",
   "license": "MIT",
   "devDependencies": {
     "js-yaml": "^4.1.0",
