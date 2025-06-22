@@ -22,6 +22,8 @@ router.get('/:id',
 
 
 router.post("/",
+  genericMiddleware.validarCamposExactos(Post),
+  postMiddleware.tagOrCommentDontExists,
   postMiddleware.existUserRequest,
   /* 
 #swagger.tags = ['Posts']
@@ -32,8 +34,10 @@ router.post("/",
 
 router.put("/:id",
   genericMiddleware.existsModelById(Post),
-  postMiddleware.userDoesntChange,
   genericMiddleware.validarCamposExactos(Post),
+  postMiddleware.tagOrCommentDontExists,
+  postMiddleware.userDoesntChange,
+  
   /* 
     #swagger.tags = ['Posts']
     #swagger.path = '/posts/{id}'
