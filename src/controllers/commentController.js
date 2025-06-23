@@ -1,21 +1,29 @@
 const {Comment, Post, User} = require('../models');
-
+require('dotenv').config();
+//Importar cliente de redis
 const {redisClient} = require('../config/redisClient')
 
 //Importar controladores de cache
-const {getModelsCache, getModelByIdCache, deleteManyModelsCache, deleteManyDB} = require('./genericController');
+const {getModelsCache, getModelByIdCache, deleteManyModelsCache, deleteManyDbParents} = require('./genericController');
 
 
 //Obtener todos los comentarios -> getComments
-const getComments = async (_,res) => {
-    //Guardar la cacheKey
+const getComments = async (_, res) => {
+    const rangoMeses = parseInt(process.env.RANGO_VISIBILIDAD) || 6;
+    const fechaLimite = new Date();
+    fechaLimite.setMonth(fechaLimite.getMonth() - rangoMeses);
+
+    // Buscar comentarios dentro del rango de fechas usando el campo 'fecha'
     const cached = await getModelsCache(Comment);
-    const comments = cached ? JSON.parse(cached) : await Comment.find();
-    //Guardar los comentarios en la cache con la key: comments:todos
-    await redisClient.set('Comments:todos', JSON.stringify(comments), {EX: 300});
-    //Retornar los comentarios
+    let comments;
+    if (cached) {
+        comments = JSON.parse(cached).filter(comment => new Date(comment.fecha) >= fechaLimite);
+    } else {
+        comments = await Comment.find({ fecha: { $gte: fechaLimite } });
+    }
+
+    await redisClient.set('Comments:todos', JSON.stringify(comments), { EX: 300 });
     res.status(200).json(comments);
-    
 }
 //Obtener un comentario por id -> getCommentById
 const getCommentById = async (req, res) => {
@@ -81,7 +89,7 @@ const deleteComment = async (req, res) => {
     //El middelware verificó que el comenario existe
     const deletedComment = await Comment.findByIdAndDelete(commentId);
     //Eliminar comentario de modelos
-    await deleteManyDB([User, Post], { comments: commentId });
+    await deleteManyDbParents([User, Post], { comments: commentId });
 
     //Eliminar el comentario de la cache, junto con sus padres asociados
     await deleteManyModelsCache([Comment, Post, User]);
