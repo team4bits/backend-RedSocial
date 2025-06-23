@@ -20,10 +20,6 @@ const createPost = async (req, res) => {
     const post = await Post.create(req.body);
     const { userId } = req.body;
     await User.findByIdAndUpdate(userId, { $push: { posts: post._id } }, { new: true }); // Agrega el post al usuario
-    /*
-    await deleteModelsCache(User) // Elimina el cache de todos los usuarios, ya que se ha creado un nuevo post y el cache está desactualizado
-    await deleteModelsCache(Post) // Elimina el cache de todos los posts, ya que se ha creado uno nuevo por ende el cache esta desactualizado
-    */
     await deleteManyModelsCache([User, Post]) // Elimina el cache del usuario que creó el post
     res.status(201).json(post);
 };
@@ -31,7 +27,6 @@ const createPost = async (req, res) => {
 const updatePostById = async (req, res) => {
     await Post.findByIdAndUpdate(req.params.id, req.body, { new: true })
     await deleteModelByIdCache(Post, req.params.id)
-    //await deleteModelsCache(Post) // Borro ambos caches, el de un post en particular y el de todos los posts para garantizar que la información sea borrada
     await deleteManyModelsCache([User, Post])//Borro cache de modelo actual y de padre
     res.status(200).json({ message: "Post actualizado correctamente" });
 };
