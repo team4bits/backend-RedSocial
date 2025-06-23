@@ -30,31 +30,6 @@ app.use("/archives", archiveRoute);
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocumentation));
 app.use(cors({origin: 'http://localhost:5173'}))
 
-/*
-como el usuario es el que crea los posts y los comments, desde esa ruta y controlador se deberia manejar 
-unas rutas a los posts y comments que le pertenecen.
-
-por ejemplo:
-crear un post y en el metodo se llamaria a crearPost del controlador de post y se le enviaria
-el id del usuario. Asi tambien se deberia hacer con modificar y eliminar un post de ese usuario. 
-Lo mismo seria con los comments
-
-en las rutas de posts y comments ver todos, ver por id del post o comment
-
-en los controladores de post y comment estaria crear, modificar, eliminar, ver todos, ver por id y ver todos los de un usuario.
-
-pasaria algo similar con archive y post
-*/
-
-// es para simplemente ver el error del multer 
-/*
-app.use((err, req, res, next) => {
-  console.error('❌ ERROR GLOBAL:', err.message);
-  res.status(err.status || 500).json({
-    error: err.message || 'Error interno del servidor'
-  });
-});
-*/
 app.use(manejoDeErroresGlobales); // Manejo de errores globales
 
 app.listen(PORT, async (err) => {

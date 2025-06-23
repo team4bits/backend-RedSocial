@@ -55,22 +55,10 @@
           {
             "name": "body",
             "in": "body",
+            "description": "Datos del usuario",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "nickName": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "any"
-                },
-                "posts": {
-                  "example": "any"
-                },
-                "comments": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/UserInput"
             }
           }
         ],
@@ -116,16 +104,10 @@
           {
             "name": "body",
             "in": "body",
+            "description": "Datos del usuario",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "posts": {
-                  "example": "any"
-                },
-                "comments": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/UserInput"
             }
           }
         ],
@@ -176,16 +158,10 @@
           {
             "name": "body",
             "in": "body",
+            "description": "Datos del comentario (userId, postId y content)",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "postId": {
-                  "example": "any"
-                },
-                "userId": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/CommentInput"
             }
           }
         ],
@@ -227,6 +203,15 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Solo el contenido del comentario",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CommentUpdateInput"
+            }
           }
         ],
         "responses": {
@@ -276,13 +261,10 @@
           {
             "name": "body",
             "in": "body",
+            "description": "Datos del post (userId y content)",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "userId": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/PostInput"
             }
           }
         ],
@@ -328,13 +310,10 @@
           {
             "name": "body",
             "in": "body",
+            "description": "Solo el contenido del post",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "userId": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/PostUpdateInput"
             }
           }
         ],
@@ -416,7 +395,7 @@
         }
       }
     },
-    "/posts/{postId}/tags/{id}": {
+    "/posts/{postId}/archives/{id}": {
       "delete": {
         "tags": [
           "Post Image"
@@ -495,16 +474,10 @@
           {
             "name": "body",
             "in": "body",
+            "description": "Datos del tag",
+            "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "tag": {
-                  "example": "any"
-                },
-                "posts": {
-                  "example": "any"
-                }
-              }
+              "$ref": "#/definitions/TagInput"
             }
           }
         ],
@@ -546,6 +519,15 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Datos del tag",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TagInput"
+            }
           }
         ],
         "responses": {
@@ -591,18 +573,23 @@
           "Archives"
         ],
         "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "postId": {
-                  "example": "any"
-                }
-              }
-            }
+            "name": "postId",
+            "in": "formData",
+            "type": "string",
+            "description": "ID del post al que pertenece el archivo",
+            "required": true
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "type": "file",
+            "description": "Archivo a subir",
+            "required": true
           }
         ],
         "responses": {
@@ -621,12 +608,22 @@
           "Archives"
         ],
         "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "type": "file",
+            "description": "Archivo a subir",
+            "required": true
           }
         ],
         "responses": {
@@ -658,6 +655,78 @@
           "404": {
             "description": "Not Found"
           }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "UserInput": {
+      "type": "object",
+      "properties": {
+        "nickName": {
+          "type": "string",
+          "example": "ejemploNick"
+        },
+        "email": {
+          "type": "string",
+          "example": "ejemplo@email.com"
+        }
+      }
+    },
+    "TagInput": {
+      "type": "object",
+      "properties": {
+        "nameTag": {
+          "type": "string",
+          "example": "ejemploTag"
+        }
+      }
+    },
+    "PostInput": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "example": "id de usuario"
+        },
+        "content": {
+          "type": "string",
+          "example": "Contenido del post"
+        }
+      }
+    },
+    "PostUpdateInput": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "example": "Contenido del post"
+        }
+      }
+    },
+    "CommentInput": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "example": "id de usuario"
+        },
+        "postId": {
+          "type": "string",
+          "example": "id del post"
+        },
+        "content": {
+          "type": "string",
+          "example": "Contenido del comentario"
+        }
+      }
+    },
+    "CommentUpdateInput": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "type": "string",
+          "example": "Contenido del comentario"
         }
       }
     }

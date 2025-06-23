@@ -27,7 +27,31 @@ const doc = {
       { name: 'Archives'},
       { name: 'Post Tag'},
       { name: 'Post Image'}
-    ]
+    ],
+    definitions: {
+      UserInput: {
+        nickName: "ejemploNick",
+        email: "ejemplo@email.com"
+      },
+      TagInput: {
+        nameTag: "ejemploTag"
+      },
+      PostInput: {
+        userId: "id de usuario",
+        content: "Contenido del post"
+      },
+      PostUpdateInput: {
+        content: "Contenido del post"
+      },
+      CommentInput: {
+        userId: "id de usuario",
+        postId: "id del post",
+        content: "Contenido del comentario"
+      },
+      CommentUpdateInput: {
+        content: "Contenido del comentario"
+      }
+    }
 };
 
 swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {

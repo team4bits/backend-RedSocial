@@ -16,6 +16,19 @@ router.post('/',
     /* 
         #swagger.tags = ['Archives']
         #swagger.path = '/archives'
+        #swagger.consumes = ['multipart/form-data']
+        #swagger.parameters['postId'] = {
+          in: 'formData',
+          type: 'string',
+          description: 'ID del post al que pertenece el archivo',
+          required: true
+        }
+        #swagger.parameters['file'] = {
+          in: 'formData',
+          type: 'file',
+          description: 'Archivo a subir',
+          required: true
+        }
     */
     upload.array('imagenes', 5), 
     genericMiddleware.existModelRequest(Post), 
@@ -25,6 +38,13 @@ router.put('/:id',
     /* 
         #swagger.tags = ['Archives']
         #swagger.path = '/archives/{id}'
+        #swagger.consumes = ['multipart/form-data']
+        #swagger.parameters['file'] = {
+          in: 'formData',
+          type: 'file',
+          description: 'Archivo a subir',
+          required: true
+        }
     */
     archiveMiddleware.archiveById, 
     upload.single('imagenes'), 

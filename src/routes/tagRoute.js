@@ -29,7 +29,13 @@ router.post('/',
   /* 
     #swagger.tags = ['Tags']
     #swagger.path = '/tags'
-    */
+    #swagger.parameters['body'] = {
+      in: 'body',
+      description: 'Datos del tag',
+      required: true,
+      schema: { $ref: "#/definitions/TagInput" }
+    }
+  */
   tagController.createTag);
 
 router.put("/:id",
@@ -39,7 +45,13 @@ router.put("/:id",
   /* 
     #swagger.tags = ['Tags']
     #swagger.path = '/tags/{id}'
-    */
+    #swagger.parameters['body'] = {
+      in: 'body',
+      description: 'Datos del tag',
+      required: true,
+      schema: { $ref: "#/definitions/TagInput" }
+    }
+  */
   tagController.updateTagById);
 
 router.delete("/:id",

@@ -21,7 +21,6 @@ router.get('/:id',
     */
     userController.getUserById);
 
-
 router.post(
   "/",
   userMiddleware.notExistsUser,
@@ -30,7 +29,13 @@ router.post(
   /* 
     #swagger.tags = ['Users']
     #swagger.path = '/users'
-    */
+    #swagger.parameters['body'] = {
+      in: 'body',
+      description: 'Datos del usuario',
+      required: true,
+      schema: { $ref: "#/definitions/UserInput" }
+    }
+  */
   userController.createUser
 );
 
@@ -42,7 +47,13 @@ router.put(
   /* 
     #swagger.tags = ['Users']
     #swagger.path = '/users/{id}'
-    */
+    #swagger.parameters['body'] = {
+      in: 'body',
+      description: 'Datos del usuario',
+      required: true,
+      schema: { $ref: "#/definitions/UserInput" }
+    }
+  */
   userController.updateUserById
 );
 
@@ -55,28 +66,5 @@ router.delete(
     */
   userController.deleteById
 );
-
-// //Rutas Posts
-
-// router.get('/:id/posts', 
-//   genericMiddleware.existsModelById(User),
-//   /* 
-//     #swagger.tags = ['Users']
-//     #swagger.path = '/users/{id}/posts'
-//     */
-//   postController.getPostsByUserId
-// );
-
-// //Rutas Comments
-
-// router.get('/:id/comments', 
-//   genericMiddleware.existsModelById(User),
-//   /* 
-//     #swagger.tags = ['Users']
-//     #swagger.path = '/users/{id}/comments'
-//     */
-//   commentController.getCommentsByUserId
-// );
-
 
 module.exports = router;
