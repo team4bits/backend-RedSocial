@@ -3,11 +3,11 @@ const { Schema } = require("mongoose");
 
 const tagSchema = new mongoose.Schema(
   {
-    tag: {
+    nameTag: {
         type: Schema.Types.String,
-        required: [true, 'El tag es obligatorio'],
-        unique: [true, 'El tag ya se encuentra registrado'],
-        minlength: [1, 'El tag debe tener al menos 1 carácter'],
+        required: [true, 'El nombre del tag es obligatorio'],
+        unique: [true, 'El nombre del tag ya se encuentra registrado'],
+        minlength: [1, 'El nombre del tag debe tener al menos 1 carácter'],
     },
     posts:[{
                 type: Schema.Types.ObjectId,

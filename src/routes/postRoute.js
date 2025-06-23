@@ -25,11 +25,16 @@ router.post("/",
   genericMiddleware.validarCamposExactos(Post),
   postMiddleware.tagOrCommentDontExists,
   genericMiddleware.existModelRequest(User),
-
   /* 
-#swagger.tags = ['Posts']
-#swagger.path = '/posts'
-*/
+    #swagger.tags = ['Posts']
+    #swagger.path = '/posts'
+    #swagger.parameters['body'] = {
+      in: 'body',
+      description: 'Datos del post (userId y content)',
+      required: true,
+      schema: { $ref: "#/definitions/PostInput" }
+    }
+  */
   postController.createPost
 );
 
@@ -38,11 +43,16 @@ router.put("/:id",
   genericMiddleware.validarCamposExactos(Post),
   postMiddleware.tagOrCommentDontExists,
   postMiddleware.userDoesntChange,
-  
   /* 
     #swagger.tags = ['Posts']
     #swagger.path = '/posts/{id}'
-    */
+    #swagger.parameters['body'] = {
+      in: 'body',
+      description: 'Solo el contenido del post',
+      required: true,
+      schema: { $ref: "#/definitions/PostUpdateInput" }
+    }
+  */
   postController.updatePostById
 );
 
@@ -81,7 +91,7 @@ router.delete("/:postId/image/:id",
   postMiddleware.validarImagenAsociadaAPost,
   /* 
     #swagger.tags = ['Post Image']
-    #swagger.path = '/posts/{postId}/tags/{id}'
+    #swagger.path = '/posts/{postId}/archives/{id}'
   */
   archiveController.deleteById
 );
@@ -91,7 +101,7 @@ router.delete("/:postId/image/:id",
     postMiddleware.validarImagenAsociadaAPost,
     /* 
     #swagger.tags = ['Post Image']
-    #swagger.path = '/posts/{postId}/tags/{id}'
+    #swagger.path = '/posts/{postId}/archives/{id}'
     */
     archiveController.updateArchive
   );

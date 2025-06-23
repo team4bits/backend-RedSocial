@@ -28,6 +28,12 @@ router.post('/',
     /* 
     #swagger.tags = ['Comments']
     #swagger.path = '/comments'
+    #swagger.parameters['body'] = {
+      in: 'body',
+      description: 'Datos del comentario (userId, postId y content)',
+      required: true,
+      schema: { $ref: "#/definitions/CommentInput" }
+    }
     */
     genericMiddleware.validarCamposExactos(Comment),
     genericMiddleware.existModelRequest(User),
@@ -40,6 +46,12 @@ router.put('/:id',
     /* 
     #swagger.tags = ['Comments']
     #swagger.path = '/comments/{id}'
+    #swagger.parameters['body'] = {
+      in: 'body',
+      description: 'Solo el contenido del comentario',
+      required: true,
+      schema: { $ref: "#/definitions/CommentUpdateInput" }
+    }
     */
     genericMiddleware.existsModelById(Comment),
     commentController.updateComment
