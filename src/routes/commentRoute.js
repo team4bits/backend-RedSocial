@@ -1,7 +1,7 @@
 const {Router} = require('express');
 const {commentController} = require('../controllers');
 const {genericMiddleware, commentMiddleware} = require('../middlewares');
-const {Comment} = require('../models');
+const {Comment, User, Post} = require('../models');
 const router = Router();
 
 //Obtener todos los comentarios
@@ -29,9 +29,9 @@ router.post('/',
     #swagger.tags = ['Comments']
     #swagger.path = '/comments'
     */
-    commentMiddleware.postIdInBodyVerify,
-    commentMiddleware.userIdInBodyVerify,
     genericMiddleware.validarCamposExactos(Comment),
+    genericMiddleware.existModelRequest(User),
+    genericMiddleware.existModelRequest(Post),
     commentController.createComment
 );
 
