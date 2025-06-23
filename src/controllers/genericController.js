@@ -33,4 +33,35 @@ const deleteManyModelsCache = async (modelos) => {
        await deleteModelsCache(modelo);
    });
 };
-module.exports = { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache,  deleteManyModelsCache };
+//Controlador genérico para borrar varios de un modelo en la db
+const deleteManyDbParents = async (modelos, queryObject) => {
+    /*
+        Contolador genérico para borrar varios modelos de la base de datos
+        Parametros:
+        modelos: Array de modelos a eliminar de la base de datos
+        queryObject: Objeto de consulta para filtrar los documentos a eliminar
+
+    */
+    modelos.forEach(async (modelo) => {
+        console.log(`Eliminando ${modelo.modelName}s con query:`, queryObject);
+        await modelo.updateMany(
+            queryObject,
+            { $pull: queryObject }
+        )
+    })
+}
+//Controlador genérico para eliminar varios hijos de un modelo en la db
+const deleteManyDbChildren = async (modelos, queryObject) => {
+    /*
+        Contolador genérico para eliminar varios modelos de la base de datos
+        Parametros:
+        modelos: Array de modelos a eliminar de la base de datos
+        queryObject: Objeto de consulta para filtrar los documentos a eliminar
+
+    */
+    modelos.forEach(async (modelo) => {
+        console.log(`Eliminando ${modelo.modelName}s con query:`, queryObject);
+        await modelo.deleteMany(queryObject)
+    })
+}
+module.exports = { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache,  deleteManyModelsCache, deleteManyDbParents, deleteManyDbChildren };

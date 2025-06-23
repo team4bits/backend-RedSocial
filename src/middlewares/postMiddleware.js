@@ -46,4 +46,11 @@ const existsPostYTagPorId = async (req, res, next) => {
         }
     };
 
-module.exports = {  userDoesntChange, existsPostYTagPorId, validarImagenAsociadaAPost };
+const tagOrCommentDontExists = (req, res, next) => {
+    if (req.body.tags !== undefined || req.body.comments !== undefined) {
+        return errorPersonalizado("No se pueden agregar tag o comment al crear un user", 400, next);
+    }
+    next();
+}
+
+module.exports = { userDoesntChange, existsPostYTagPorId, validarImagenAsociadaAPost, tagOrCommentDontExists };
