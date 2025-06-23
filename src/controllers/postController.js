@@ -1,6 +1,6 @@
 const { Post, Comment, Archive, Tag, User } = require("../models");
 const { redisClient } = require('../config/redisClient')
-const { getModelByIdCache, getModelsCache, deleteModelByIdCache, deleteManyModelsCache } = require("./genericController")
+const { getModelByIdCache, getModelsCache, deleteModelByIdCache, deleteManyModelsCache, deleteManyDbChildren } = require("./genericController")
 
 const getPosts = async (_, res) => {
     const cached = await getModelsCache(Post)
@@ -40,9 +40,8 @@ const deletePostById = async (req, res) => {
     const postId = req.params.id;
     //Obtener el post en una constante
     const post = await Post.findById(postId);
-    await Archive.deleteMany({ postId: postId });
-    await Comment.deleteMany({ postId: postId });
-    await Tag.deleteMany({ postId: postId });
+    //Borrar los comentarios, archivos y tags del post
+    await deleteManyDbChildren([Archive, Comment, Tag], { postId: postId }); 
     await Post.findByIdAndDelete(postId);
     await deleteModelByIdCache(Post, postId);
     await deleteManyModelsCache([User, Post])//Borro cache de modelo actual y de padre
@@ -69,7 +68,8 @@ const actualizarTag = (metodo) => {
             await Tag.findByIdAndUpdate(req.params.tagId, { $pull: { posts: req.params.postId } }, { new: true });
         }
             await deleteModelByIdCache(Post, req.params.id) 
-            await deleteManyModelsCache([User, Post])//Borro cache de modelo actual y de padre
+            //Borro cache de modelo actual y de padre
+            await deleteManyModelsCache([User, Post])
             res.status(200).json({ message: `Tag ${metodo == "agregar" ? "agregado" : "eliminado"} correctamente` });
         
     }

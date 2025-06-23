@@ -34,7 +34,7 @@ const deleteManyModelsCache = async (modelos) => {
    });
 };
 //Controlador genérico para borrar varios de un modelo en la db
-const deleteManyDB = async (modelos, queryObject) => {
+const deleteManyDbParents = async (modelos, queryObject) => {
     /*
         Contolador genérico para borrar varios modelos de la base de datos
         Parametros:
@@ -50,5 +50,18 @@ const deleteManyDB = async (modelos, queryObject) => {
         )
     })
 }
+//Controlador genérico para eliminar varios hijos de un modelo en la db
+const deleteManyDbChildren = async (modelos, queryObject) => {
+    /*
+        Contolador genérico para eliminar varios modelos de la base de datos
+        Parametros:
+        modelos: Array de modelos a eliminar de la base de datos
+        queryObject: Objeto de consulta para filtrar los documentos a eliminar
 
-module.exports = { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache,  deleteManyModelsCache, deleteManyDB };
+    */
+    modelos.forEach(async (modelo) => {
+        console.log(`Eliminando ${modelo.modelName}s con query:`, queryObject);
+        await modelo.deleteMany(queryObject)
+    })
+}
+module.exports = { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache,  deleteManyModelsCache, deleteManyDbParents, deleteManyDbChildren };
