@@ -34,6 +34,8 @@ router.post('/',
 
 router.put("/:id",
   genericMiddleware.existsModelById(Tag),
+  genericMiddleware.validarCamposExactos(Tag),
+  tagMiddleware.postDoesntExists,
   /* 
     #swagger.tags = ['Tags']
     #swagger.path = '/tags/{id}'
