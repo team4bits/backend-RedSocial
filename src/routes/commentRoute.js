@@ -31,6 +31,7 @@ router.post('/',
     */
     commentMiddleware.postIdInBodyVerify,
     commentMiddleware.userIdInBodyVerify,
+    genericMiddleware.validarCamposExactos(Comment),
     commentController.createComment
 );
 

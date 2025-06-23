@@ -1,4 +1,3 @@
-
 const { User } = require('../models');
 
 const { errorPersonalizado } = require('./genericMiddleware');
@@ -17,4 +16,11 @@ const notExistsUser= async (req, res, next) => {
     next();
 };
   
-module.exports = { notExistsUser };
+const postOrCommentDontExists = (req, res, next) => {
+    if (req.body.posts !== undefined || req.body.comments !== undefined) {
+        return errorPersonalizado("No se pueden agregar post o comment al crear un user", 400, next);
+    }
+    next();
+}
+
+module.exports = { notExistsUser, postOrCommentDontExists };

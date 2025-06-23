@@ -14,4 +14,11 @@ const notExistsTag = async (req, res, next) => {
     next();
 };
 
-module.exports = { notExistsTag };
+const postDoesntExists = (req, res, next) => {
+    if (req.body.posts !== undefined) {
+        return errorPersonalizado("No se pueden agregar post al crear un tag", 400, next);
+    }
+    next();
+}
+
+module.exports = { notExistsTag, postDoesntExists };
