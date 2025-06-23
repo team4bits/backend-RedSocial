@@ -42,6 +42,10 @@ const createArchives = async (req, res, next) => {
 };
 
 const updateArchive = async (req, res, next) => {
+  if (req.body.postId !== undefined) {
+    return res.status(400).json({ error: 'No se puede modificar el postId de una imagen' });
+  }
+  
   if (!req.file) {
     return res.status(400).json({ error: 'El campo "imagenes" es obligatorio' });
   }
