@@ -1,6 +1,6 @@
 const { Tag } = require("../models");
 const { redisClient }  = require('../config/redisClient')
-const { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache } = require("./genericController")
+const { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache, deleteManyModelsCache } = require("./genericController")
 
 const getTags = async (_, res) => {
     const cached = await getModelsCache(Tag)
@@ -33,7 +33,7 @@ const deleteById = async (req, res) => {
     const tagId = req.params.id;
     await Tag.findByIdAndDelete(tagId);
     await deleteModelByIdCache(Tag, tagId);
-    await deleteModelsCache(Tag);
+    await deleteManyModelsCache([Tag, Post]);
     res.status(200).json({ message: "Tag eliminado correctamente" });
 };
 
