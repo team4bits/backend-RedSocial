@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const { postController, archiveController } = require("../controllers");
 const { genericMiddleware, postMiddleware } = require("../middlewares");
-const { Post, Archive } = require("../models");
+const { Post, Archive, User } = require("../models");
 const router = Router()
 
 router.get('/',
@@ -22,7 +22,7 @@ router.get('/:id',
 
 
 router.post("/",
-  postMiddleware.existUserRequest,
+  genericMiddleware.existModelRequest(User),
   /* 
 #swagger.tags = ['Posts']
 #swagger.path = '/posts'
