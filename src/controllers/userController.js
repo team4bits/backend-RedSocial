@@ -1,6 +1,6 @@
 const { User, Post, Comment } = require("../models");
 const { redisClient }  = require('../config/redisClient')
-const { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache, deleteManyModelsCache } = require("./genericController")
+const { getModelByIdCache, getModelsCache, deleteModelsCache, deleteModelByIdCache, deleteManyModelsCache, deleteManyDbChildren } = require("./genericController")
 
 const getUsers = async (_, res) => {
     const cached = await getModelsCache(User)
@@ -31,8 +31,8 @@ const updateUserById = async (req, res) => {
 
 const deleteById = async (req, res) => {
     const userId = req.params.id;
-    await Post.deleteMany({ userId: userId });
-    await Comment.deleteMany({ userId: userId });
+    //Borrar los posts y comentarios del usuario
+    await deleteManyDbChildren([Post, Comment], { userId: userId }); 
     await User.findByIdAndDelete(userId);
     await deleteModelByIdCache(User, userId);
     await deleteManyModelsCache([User, Post, Comment]) // Borro cache de modelo actual y de padre
