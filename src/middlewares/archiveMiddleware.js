@@ -7,7 +7,7 @@ const path = require('path');
 const { errorPersonalizado, validarId } = require('./genericMiddleware');
 
 const sinPostID = async (req, res, next) => {
-  const postId = req.body.postId;
+  const postId = req.body.postId;  
 
   const cached = await redisClient.get(`Post:${postId}`);
   if (cached) {
