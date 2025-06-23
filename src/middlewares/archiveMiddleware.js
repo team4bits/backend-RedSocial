@@ -4,14 +4,10 @@ const mongoose = require("mongoose");
 const { redisClient } = require("../config/redisClient");
 const multer = require('multer');
 const path = require('path');
-const { errorPersonalizado } = require('./genericMiddleware');
+const { errorPersonalizado, validarId } = require('./genericMiddleware');
 
 const sinPostID = async (req, res, next) => {
   const postId = req.body.postId;
-
-  if (!postId) {return errorPersonalizado('Falta el campo postId en el body', 400, next)}
-
-  if (!mongoose.Types.ObjectId.isValid(postId)) {return errorPersonalizado('El ID del post es inválido', 400, next)}
 
   const cached = await redisClient.get(`Post:${postId}`);
   if (cached) {
@@ -20,8 +16,6 @@ const sinPostID = async (req, res, next) => {
   }
 
   const post = await Post.findById(postId);
-  if (!post) {return errorPersonalizado('El post asociado no existe', 404, next)}
-
   await redisClient.set(`Post:${postId}`, JSON.stringify(post), { EX: 300 });
   req.post = post;
   next();
@@ -77,4 +71,4 @@ const upload = multer({
   fileFilter
 });
 
-module.exports = { sinPostID, archiveById, fileFilter, upload };
+module.exports = { archiveById, fileFilter, upload };

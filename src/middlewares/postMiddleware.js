@@ -1,25 +1,6 @@
 const { Post, User, Tag, Archive } = require('../models');
-const { errorPersonalizado } = require('./genericMiddleware');
+const { errorPersonalizado, validarId } = require('./genericMiddleware');
 const { getModelByIdCache } = require('../controllers/genericController');
-
-const existUserRequest = async (req, res, next) => {
-    try {
-        const userId = req.body.userId;
-        if (!userId) {
-            return errorPersonalizado("El ID del usuario es requerido", 400, next);
-        }
-        if (!/^[a-fA-F0-9]{24}$/.test(userId)) {
-            return errorPersonalizado("El ID del usuario debe ser una cadena de strings de 24 caracteres hexadecimales", 400, next);
-        }
-        const user = await User.findById(userId);
-        if (!user) {
-            return errorPersonalizado(`Usuario con ID ${userId} no encontrado`, 404, next);
-        }
-        next();
-    } catch (error) {
-        next(error);
-    }
-};
 
 const userDoesntChange = (req, res, next) => {
     if (req.body.userId !== undefined) {
@@ -72,4 +53,4 @@ const tagOrCommentDontExists = (req, res, next) => {
     next();
 }
 
-module.exports = { existUserRequest, userDoesntChange, existsPostYTagPorId, validarImagenAsociadaAPost, tagOrCommentDontExists };
+module.exports = { userDoesntChange, existsPostYTagPorId, validarImagenAsociadaAPost, tagOrCommentDontExists };

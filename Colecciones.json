@@ -640,7 +640,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"coment\": \"este es un comentario modificado\"\n}",
+							"raw": "{\n\t\"content\": \"este es un comentario modificado\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -716,7 +716,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"userId\": \"1\", \n\t\"postId\": \"2\",\n\t\"coment\": \"este es un nuevo comentario\"\n}",
+							"raw": "{\n\t\"userId\": \"1\", \n\t\"postId\": \"2\",\n\t\"content\": \"este es un nuevo comentario\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
