@@ -1,5 +1,6 @@
 const multer = require('multer');
 const { redisClient } = require('../config/redisClient');
+const mongoose = require('mongoose');
 const logRequest = (req, _, next) => {
     console.log({ method: req.method, url: req.url, fechaHora: new Date(), body: req.body, params: req.params });
     next();
@@ -74,8 +75,22 @@ const validarCamposExactos = (modelo) => {
     }
 }
 
+const existModelRequest = (modelo) => {
+    return async (req, res, next) => {
+        const nombreModelo = modelo.modelName;
+        const modeloId = req.body[nombreModelo.toLowerCase() + "Id"];
+        if (!modeloId) {
+            return errorPersonalizado(`El ID del ${modelo.modelName} es requerido`, 400, next);
+        }
+        if (! mongoose.Types.ObjectId.isValid(modeloId)) {
+            return errorPersonalizado(`El ID del ${modelo.modelName} es inválido`, 400, next)
+        }
+        const aux = await modelo.findById(modeloId);
+        if (!aux) {
+            return errorPersonalizado(`${modelo.modelName} con ID ${modeloId} no encontrado`, 404, next);
+        }
+        next();
+    }
+}
 
-
-
-
-module.exports = { logRequest, existsModelById, existsAnyByModel, manejoDeErroresGlobales, errorPersonalizado, validarCamposExactos };
+module.exports = { logRequest, existsModelById, existsAnyByModel, manejoDeErroresGlobales, errorPersonalizado, validarCamposExactos, existModelRequest };
