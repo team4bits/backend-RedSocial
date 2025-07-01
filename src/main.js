@@ -22,13 +22,13 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 // deja la carpeta uploads como estatica (permite guardar y acceder via localhost)
 
 // Rutas
+app.use(cors({origin: 'http://localhost:5173'}))
 app.use("/users", userRoute);
 app.use("/comments", commentRoute);
 app.use('/posts', postRoute);
 app.use("/tags", tagRoute);
 app.use("/archives", archiveRoute);
 app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerDocumentation));
-app.use(cors({origin: 'http://localhost:5173'}))
 
 app.use(manejoDeErroresGlobales); // Manejo de errores globales
 
