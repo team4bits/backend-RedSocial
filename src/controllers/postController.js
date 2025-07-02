@@ -19,8 +19,10 @@ const getPostById = async (req, res) => {
 const getPostsByUserId = async (req, res) => {
     const userId = req.params.id;
     const cached = await getModelsCache(Post)
-    const posts = cached ? JSON.parse(cached) : await Post.find({ userId:
-    userId }).populate('comments').populate('tags'); 
+    const posts = cached ? JSON.parse(cached) : await Post.find({ userId: userId })
+        .populate('comments')
+        .populate('tags')
+        .populate('imagenes'); // Agregado populate de imágenes
     await redisClient.set(`Posts:usuario:${userId}`, JSON.stringify(posts), { EX: 300 }) 
     res.status(200).json(posts);
 };
