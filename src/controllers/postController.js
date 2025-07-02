@@ -18,12 +18,21 @@ const getPostById = async (req, res) => {
 
 const getPostsByUserId = async (req, res) => {
     const userId = req.params.id;
-    const cached = await getModelsCache(Post)
+    const cacheKey = `Posts:usuario:${userId}`;
+    const cached = await redisClient.get(cacheKey);
+    
     const posts = cached ? JSON.parse(cached) : await Post.find({ userId: userId })
-        .populate('comments')
+        .populate({
+            path: 'comments',
+            populate: { path: 'userId', select: 'nickName email' }
+        })
         .populate('tags')
-        .populate('imagenes'); // Agregado populate de imágenes
-    await redisClient.set(`Posts:usuario:${userId}`, JSON.stringify(posts), { EX: 300 }) 
+        .populate('imagenes');
+    
+    if (!cached) {
+        await redisClient.set(cacheKey, JSON.stringify(posts), { EX: 300 });
+    }
+    
     res.status(200).json(posts);
 };
 
