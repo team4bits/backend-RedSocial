@@ -16,6 +16,15 @@ const getPostById = async (req, res) => {
     res.status(200).json(post);
 };
 
+const getPostsByUserId = async (req, res) => {
+    const userId = req.params.id;
+    const cached = await getModelsCache(Post)
+    const posts = cached ? JSON.parse(cached) : await Post.find({ userId:
+    userId }).populate('comments').populate('tags'); 
+    await redisClient.set(`Posts:usuario:${userId}`, JSON.stringify(posts), { EX: 300 }) 
+    res.status(200).json(posts);
+};
+
 const createPost = async (req, res) => {
     const post = await Post.create(req.body);
     const { userId } = req.body;
@@ -70,4 +79,4 @@ const actualizarTag = (metodo) => {
     }
 }
 
-module.exports = { getPosts, getPostById, createPost, updatePostById, deletePostById, actualizarTag };
+module.exports = { getPosts, getPostById, createPost, updatePostById, deletePostById, actualizarTag, getPostsByUserId };

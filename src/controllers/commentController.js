@@ -40,6 +40,19 @@ const getCommentById = async (req, res) => {
     await redisClient.set(`Comment:${commentId}`, JSON.stringify(comment), { EX: 300 });
     res.status(200).json(comment);
 };
+
+//Obtener comentarios por userId -> getCommentsByUserId
+const getCommentsByUserId = async (req, res) => {
+    const userId = req.params.id; // <-- Cambiado de postId a userId
+    const cached = await getModelsCache(Comment);
+    const comments = cached ? 
+        JSON.parse(cached).filter(comment => comment.userId.toString() === userId) : 
+        await Comment.find({ userId: userId }).populate('postId', 'content'); // <-- Filtra por userId
+    //Guardar los comentarios en la cache con la key: comments:user:userId
+    await redisClient.set(`Comments:user:${userId}`, JSON.stringify(comments), { EX: 300 }); // <-- Clave corregida
+    res.status(200).json(comments);
+}
+
 //Crear un nuevo comentario con body-> createComment
 const createComment = async (req, res) => {
     const comment = await Comment.create(req.body);//Crear el comentario
@@ -101,10 +114,11 @@ const deleteComment = async (req, res) => {
     
 }
 
-module.exports ={
+module.exports = {
     getComments,
     getCommentById,
     createComment,
     updateComment,
-    deleteComment
+    deleteComment,
+    getCommentsByUserId  
 }

@@ -66,5 +66,15 @@ router.delete('/:id',
     commentController.deleteComment
 )
 
+//Obtener comentarios por postId
+router.get('/user/:id',
+    genericMiddleware.existsModelById(User),
+    /* 
+    #swagger.tags = ['Comments']
+    #swagger.path = '/comments/post/{postId}'
+    */
+    commentController.getCommentsByUserId
+);
+
 //Exportar el router
 module.exports = router;

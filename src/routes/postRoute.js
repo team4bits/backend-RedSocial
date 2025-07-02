@@ -18,8 +18,7 @@ router.get('/:id',
 #swagger.tags = ['Posts']
 #swagger.path = '/posts/{id}'
 */
-  postController.getPostById);
-
+  postController.getPostById);  
 
 router.post("/",
   genericMiddleware.validarCamposExactos(Post),
@@ -105,5 +104,20 @@ router.delete("/:postId/image/:id",
     */
     archiveController.updateArchive
   );
-
+  
+// Obtener posts por ID de usuario
+router.get('/user/:id',
+  genericMiddleware.existsModelById(User),
+  /* 
+#swagger.tags = ['Posts']
+#swagger.path = '/posts/user/{userId}'
+#swagger.parameters['userId'] = {
+    in: 'path',
+    description: 'ID del usuario para obtener sus posts',
+    required: true,
+    type: 'string'
+  }
+*/
+  postController.getPostsByUserId
+);
 module.exports = router;
