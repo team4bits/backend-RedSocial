@@ -4,7 +4,7 @@ const { getModelByIdCache, getModelsCache, deleteModelByIdCache, deleteManyModel
 
 const getPosts = async (_, res) => {
     const cached = await getModelsCache(Post)
-    const posts = cached ? JSON.parse(cached) : await Post.find().populate('comments').populate('tags'); // Intenta obtener los posts del cache, si no están, los busca en la base de datos
+    const posts = cached ? JSON.parse(cached) : await Post.find().populate('comments').populate('tags').populate('imagenes'); // Intenta obtener los posts del cache, si no están, los busca en la base de datos
     await redisClient.set('Posts:todos', JSON.stringify(posts), { EX: 300 })
     res.status(200).json(posts);
 };
