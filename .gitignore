@@ -2,4 +2,3 @@ node_modules
 .env
 *.txt
 docker-compose.yml
-uploads/
