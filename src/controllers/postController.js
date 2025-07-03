@@ -3,11 +3,9 @@ const { redisClient } = require('../config/redisClient')
 const { getModelByIdCache, getModelsCache, deleteModelByIdCache, deleteManyModelsCache, deleteManyDbChildren } = require("./genericController")
 
 const getPosts = async (_, res) => {
-    const cached = await getModelsCache(Post);
-    const posts = cached ? JSON.parse(cached) : await Post.find().populate('comments').populate('tags').populate('imagenes');
-    if (!cached) {
-        await redisClient.set(`${Post.modelName}s:todos`, JSON.stringify(posts), { EX: 300 });
-    }
+    const cached = await getModelsCache(Post)
+    const posts = cached ? JSON.parse(cached) : await Post.find().populate('comments').populate('tags').populate('imagenes'); // Intenta obtener los posts del cache, si no están, los busca en la base de datos
+    await redisClient.set('Posts:todos', JSON.stringify(posts), { EX: 300 })
     res.status(200).json(posts);
 };
 
