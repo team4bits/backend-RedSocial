@@ -1,6 +1,5 @@
 const { Post, User, Tag, Archive } = require('../models');
-const { errorPersonalizado, validarId } = require('./genericMiddleware');
-const { getModelByIdCache } = require('../controllers/genericController');
+const { errorPersonalizado } = require('./genericMiddleware');
 
 const userDoesntChange = (req, res, next) => {
     if (req.body.userId !== undefined) {
@@ -27,24 +26,21 @@ const validarImagenAsociadaAPost = async (req, res, next) => {
 }
 
 const existsPostYTagPorId = async (req, res, next) => {
-        try{
-            const {postId, tagId} = req.params;
+    try{
+        const {postId, tagId} = req.params;
 
-            const postCached = await getModelByIdCache(Post, postId);
-            const postToUpdate = postCached ? JSON.parse(postCached) : await Post.findById(postId);
+        const postToUpdate = await Post.findById(postId);
+        const tagToUpdate = await Tag.findById(tagId);
 
-            const tagCached = await getModelByIdCache(Tag, tagId);
-            const tagToUpdate = tagCached ? JSON.parse(tagCached) : await Tag.findById(tagId);
-
-            if (!postToUpdate || !tagToUpdate) {
-                let modelo = !postToUpdate ? "Post" : "Tag";
-                return errorPersonalizado(`${modelo} no encontrado` , 404, next);
-            }
-            next();
-         } catch (error) {
-            next(error);
+        if (!postToUpdate || !tagToUpdate) {
+            let modelo = !postToUpdate ? "Post" : "Tag";
+            return errorPersonalizado(`${modelo} no encontrado` , 404, next);
         }
-    };
+        next();
+     } catch (error) {
+        next(error);
+    }
+};
 
 const tagOrCommentDontExists = (req, res, next) => {
     if (req.body.tags !== undefined || req.body.comments !== undefined) {

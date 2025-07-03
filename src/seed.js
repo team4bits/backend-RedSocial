@@ -9,7 +9,7 @@ const cleanDB = async () => {
   await Comment.deleteMany({});
   await Tag.deleteMany({});
   await Archive.deleteMany({});
-  
+
   // Eliminar índices problemáticos
   try {
     await Tag.collection.dropIndex("tag_1");
@@ -17,14 +17,14 @@ const cleanDB = async () => {
   } catch (error) {
     console.log('Índice tag_1 no existía');
   }
-  
+
   try {
     await Post.collection.dropIndex("tags_1");
     console.log('Índice tags_1 eliminado');
   } catch (error) {
     console.log('Índice tags_1 no existía');
   }
-  
+
   console.log('Base de datos limpiada');
 };
 
@@ -33,7 +33,7 @@ const runSeed = async () => {
   try {
     // Conectar a MongoDB usando la misma configuración que main.js
     await mongo.conectarDB();
-    
+
     // Limpiar la base de datos
     await cleanDB();
 
@@ -84,7 +84,6 @@ const runSeed = async () => {
     const post1 = await Post.create({
       userId: user1._id,
       content: 'Este es mi primer post sobre programación en JavaScript'
-      // No agregamos relaciones complejas todavía
     });
 
     const post2 = await Post.create({
@@ -107,21 +106,27 @@ const runSeed = async () => {
       content: 'Qué bonitas fotos de tu viaje, ¿dónde fue exactamente?'
     });
 
+    const comment3 = await Comment.create({
+      postId: post2._id,
+      userId: user2._id,
+      content: 'Que grandes fotos, ¿qué equipo usaste para tomar estas imágenes?'
+    });
+
     console.log('Comentarios creados');
 
     // 6. Ahora actualizar las relaciones
     // Actualizar posts con sus relaciones
     await Post.findByIdAndUpdate(post1._id, {
-      $push: { 
+      $push: {
         comments: comment1._id,
         tags: tag1._id,
-        imagenes: [archive1._id, archive2._id]
+        imagenes: { $each: [archive1._id, archive2._id] }
       }
     });
 
     await Post.findByIdAndUpdate(post2._id, {
-      $push: { 
-        comments: comment2._id,
+      $push: {
+        comments: { $each: [comment2._id, comment3._id] }, // ← comment3 agregado aquí
         tags: { $each: [tag2._id, tag3._id] },
         imagenes: archive3._id
       }
@@ -129,16 +134,16 @@ const runSeed = async () => {
 
     // Actualizar usuarios con sus posts y comentarios
     await User.findByIdAndUpdate(user1._id, {
-      $push: { 
+      $push: {
         posts: post1._id,
         comments: comment2._id
       }
     });
 
     await User.findByIdAndUpdate(user2._id, {
-      $push: { 
+      $push: {
         posts: post2._id,
-        comments: comment1._id
+        comments: { $each: [comment1._id, comment3._id] } // ← comment3 agregado aquí también
       }
     });
 
@@ -149,7 +154,7 @@ const runSeed = async () => {
 
     console.log('Relaciones actualizadas');
     console.log('Seed completado exitosamente!');
-    
+
   } catch (error) {
     console.error('Error en el seed:', error);
   } finally {

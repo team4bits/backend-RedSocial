@@ -6,7 +6,7 @@ const swaggerDocumentation = require('../swaggerDoc.json');
 const { genericMiddleware } = require("./middlewares");
 const { userRoute, postRoute, tagRoute, commentRoute, archiveRoute} = require("./routes");
 const path = require('path');
-const { mongo, redis } = require('./config');
+const { mongo } = require('./config');
 const {manejoDeErroresGlobales} = require("./middlewares/genericMiddleware");
 require('dotenv').config()
 
@@ -38,8 +38,6 @@ app.listen(PORT, async (err) => {
         process.exit(1);
     }
     try {
-        // Conexión a Redis
-        await redis.conectarRedis();
         // Conexión a MongoDB
         await mongo.conectarDB();
     } catch (dbError) {

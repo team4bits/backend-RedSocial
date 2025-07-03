@@ -1,22 +1,18 @@
 const multer = require('multer');
-const { redisClient } = require('../config/redisClient');
 const mongoose = require('mongoose');
+
 const logRequest = (req, _, next) => {
     console.log({ method: req.method, url: req.url, fechaHora: new Date(), body: req.body, params: req.params });
     next();
 };
 
-
 const existsModelById = (modelo) => {
     return async (req, res, next) => {
         try {
             const id = req.params.id;
-            const cached = await redisClient.get(`${modelo.modelName}:${id}`);
-            if (!cached) {
-                const data = await modelo.findById(id);
-                if (!data) {
-                    return errorPersonalizado(`${modelo.modelName} con id ${id} no se encuentra registrado en la base de datos` , 404, next);
-                }
+            const data = await modelo.findById(id);
+            if (!data) {
+                return errorPersonalizado(`${modelo.modelName} con id ${id} no se encuentra registrado en la base de datos`, 404, next);
             }
         } catch (error) {
             next(error);
@@ -30,7 +26,7 @@ const existsAnyByModel = (modelo) => {
         try {
             const data = await modelo.findOne();
             if (!data) {
-                return errorPersonalizado(`No hay ningun ${modelo.name} registrado`, 204, next);
+                return errorPersonalizado(`No hay ningun ${modelo.modelName} registrado`, 204, next);
             }
         } catch (error) {
             next(error);
@@ -63,15 +59,15 @@ const manejoDeErroresGlobales = ((err, req, res, next) => {
 });
 
 const validarCamposExactos = (modelo) => {
-    return ( req, res, next ) => {
-    const camposValidos = Object.keys(modelo.schema.paths);
-    const camposRecibidos = Object.keys(req.body);
-    const camposInvalidos = camposRecibidos.filter(campo => !camposValidos.includes(campo));
+    return (req, res, next) => {
+        const camposValidos = Object.keys(modelo.schema.paths);
+        const camposRecibidos = Object.keys(req.body);
+        const camposInvalidos = camposRecibidos.filter(campo => !camposValidos.includes(campo));
 
-    if (camposInvalidos.length > 0) {
-        return errorPersonalizado(`hay campos inválidos`, 400, next);
-    }
-    next()
+        if (camposInvalidos.length > 0) {
+            return errorPersonalizado(`hay campos inválidos`, 400, next);
+        }
+        next()
     }
 }
 
@@ -82,7 +78,7 @@ const existModelRequest = (modelo) => {
         if (!modeloId) {
             return errorPersonalizado(`El ID del ${modelo.modelName} es requerido`, 400, next);
         }
-        if (! mongoose.Types.ObjectId.isValid(modeloId)) {
+        if (!mongoose.Types.ObjectId.isValid(modeloId)) {
             return errorPersonalizado(`El ID del ${modelo.modelName} es inválido`, 400, next)
         }
         const aux = await modelo.findById(modeloId);

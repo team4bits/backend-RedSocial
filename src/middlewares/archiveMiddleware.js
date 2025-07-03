@@ -1,22 +1,13 @@
 const Post = require("../models/post");
 const Archive = require("../models/archive");
 const mongoose = require("mongoose");
-const { redisClient } = require("../config/redisClient");
 const multer = require('multer');
 const path = require('path');
-const { errorPersonalizado, validarId } = require('./genericMiddleware');
+const { errorPersonalizado } = require('./genericMiddleware');
 
 const sinPostID = async (req, res, next) => {
   const postId = req.body.postId;  
-
-  const cached = await redisClient.get(`Post:${postId}`);
-  if (cached) {
-    req.post = JSON.parse(cached);
-    return next();
-  }
-
   const post = await Post.findById(postId);
-  await redisClient.set(`Post:${postId}`, JSON.stringify(post), { EX: 300 });
   req.post = post;
   next();
 };
@@ -24,19 +15,15 @@ const sinPostID = async (req, res, next) => {
 const archiveById = async (req, res, next) => {
   const archiveId = req.params.id?.trim();
 
-  if (!archiveId || !mongoose.Types.ObjectId.isValid(archiveId)) {return errorPersonalizado('El ID de la imagen es inválido', 400, next)}
-
-  const cached = await redisClient.get(`Archive:${archiveId}`);
-  if (cached) {
-    const parsed = JSON.parse(cached);
-    req.archive = new Archive(parsed);
-    return next();
+  if (!archiveId || !mongoose.Types.ObjectId.isValid(archiveId)) {
+    return errorPersonalizado('El ID de la imagen es inválido', 400, next);
   }
 
   const archive = await Archive.findById(archiveId);
-  if (!archive) { return errorPersonalizado('Imagen no encontrada', 404, next)}
+  if (!archive) { 
+    return errorPersonalizado('Imagen no encontrada', 404, next);
+  }
 
-  await redisClient.set(`Archive:${archiveId}`, JSON.stringify(archive), { EX: 300 });
   req.archive = archive;
   next();
 };
@@ -71,4 +58,4 @@ const upload = multer({
   fileFilter
 });
 
-module.exports = { archiveById, fileFilter, upload };
+module.exports = { sinPostID, archiveById, fileFilter, upload };
