@@ -1,15 +1,11 @@
 const Archive = require("../models/archive");
 const Post = require("../models/post");
-const { getModelsCache } = require("./genericController");
-const { redisClient } = require('../config/redisClient');
 const mongoose = require('mongoose');
 const path = require('path');
 const fs = require('fs');
 
 const getArchives = async (req, res, next) => {
-  const cached = await getModelsCache(Archive);
-  const archives = cached ? JSON.parse(cached) : await Archive.find();
-  await redisClient.set('archives:todos', JSON.stringify(archives), { EX: 300 });
+  const archives = await Archive.find();
   res.status(200).json(archives);
 };
 
@@ -37,7 +33,6 @@ const createArchives = async (req, res, next) => {
     { new: true }
   );
 
-  await redisClient.sendCommand(['DEL', 'archives:todos']);
   res.status(201).json(nuevasEntradas);
 };
 
@@ -60,7 +55,6 @@ const updateArchive = async (req, res, next) => {
 
   req.archive.imagen = `/uploads/${req.file.filename}`;
   await req.archive.save();
-  await redisClient.del('archives:todos');
   res.status(200).json(req.archive);
 };
 
@@ -88,11 +82,6 @@ const deleteById = async (req, res, next) => {
       { $pull: { imagenes: new mongoose.Types.ObjectId(archive._id) } }
     );
   }
-
-  await Promise.all([
-    redisClient.del('archives:todos'),
-    redisClient.del(`Archive:${archiveId}`)
-  ]);
 
   res.status(200).json({ message: 'Imagen eliminada correctamente' });
 };
