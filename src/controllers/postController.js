@@ -11,7 +11,7 @@ const getPosts = async (_, res) => {
 
 const getPostById = async (req, res) => {
     const cached = await getModelByIdCache(Post, req.params.id)   //Intenta obtener el post del cache
-    const post = cached ? JSON.parse(cached) : await Post.findById(req.params.id).populate({ path:'comments', select: 'userId content fecha -_id'}).populate({ path: 'tags', select: 'tag -_id' });  //Si no está en el cache, lo busca en la base de datos
+    const post = cached ? JSON.parse(cached) : await Post.findById(req.params.id).populate({ path: 'comments', select: 'userId content fecha -_id' }).populate({ path: 'tags', select: 'tag -_id' });  //Si no está en el cache, lo busca en la base de datos
     await redisClient.set(`Post:${req.params.id}`, JSON.stringify(post), { EX: 300 })  // Guarda el post en el cache con una expiración de 300 segundos
     res.status(200).json(post);
 };
@@ -20,7 +20,7 @@ const getPostsByUserId = async (req, res) => {
     const userId = req.params.id;
     const cacheKey = `Posts:usuario:${userId}`;
     const cached = await redisClient.get(cacheKey);
-    
+
     const posts = cached ? JSON.parse(cached) : await Post.find({ userId: userId })
         .populate({
             path: 'comments',
@@ -28,11 +28,11 @@ const getPostsByUserId = async (req, res) => {
         })
         .populate('tags')
         .populate('imagenes');
-    
+
     if (!cached) {
         await redisClient.set(cacheKey, JSON.stringify(posts), { EX: 300 });
     }
-    
+
     res.status(200).json(posts);
 };
 
@@ -56,7 +56,7 @@ const deletePostById = async (req, res) => {
     //Obtener el post en una constante
     const post = await Post.findById(postId);
     //Borrar los comentarios, archivos y tags del post
-    await deleteManyDbChildren([Archive, Comment, Tag], { postId: postId }); 
+    await deleteManyDbChildren([Archive, Comment, Tag], { postId: postId });
     await Post.findByIdAndDelete(postId);
     await deleteModelByIdCache(Post, postId);
     await deleteManyModelsCache([User, Post])//Borro cache de modelo actual y de padre
@@ -82,11 +82,11 @@ const actualizarTag = (metodo) => {
             await Post.findByIdAndUpdate(req.params.postId, { $pull: { tags: req.params.tagId } }, { new: true });
             await Tag.findByIdAndUpdate(req.params.tagId, { $pull: { posts: req.params.postId } }, { new: true });
         }
-            await deleteModelByIdCache(Post, req.params.id) 
-            //Borro cache de modelo actual y de padre
-            await deleteManyModelsCache([User, Post])
-            res.status(200).json({ message: `Tag ${metodo == "agregar" ? "agregado" : "eliminado"} correctamente` });
-        
+        await deleteModelByIdCache(Post, req.params.id)
+        //Borro cache de modelo actual y de padre
+        await deleteManyModelsCache([User, Post])
+        res.status(200).json({ message: `Tag ${metodo == "agregar" ? "agregado" : "eliminado"} correctamente` });
+
     }
 }
 
